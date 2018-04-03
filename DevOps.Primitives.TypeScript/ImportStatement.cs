@@ -30,5 +30,8 @@ namespace DevOps.Primitives.TypeScript
         public Identifier ModuleName { get; set; }
         [ProtoMember(5)]
         public int ModuleNameId { get; set; }
+
+        public string GetImportStatementSyntax()
+            => $"import {ExportName.GetValue()} from \"{ModuleName.GetValue()}\";";
     }
 }
