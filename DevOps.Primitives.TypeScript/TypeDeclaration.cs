@@ -1,6 +1,9 @@
-﻿using ProtoBuf;
+﻿using Common.EntityFrameworkServices;
+using ProtoBuf;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
+using static Common.Functions.CheckNullableEnumerationForAnyElements.NullableEnumerationAny;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -16,6 +19,7 @@ namespace DevOps.Primitives.TypeScript
         public TypeDeclaration(
             Identifier identifier,
             Namespace _namespace,
+            bool export = true,
             ModifierList modifierList = null,
             ImportStatementList importStatementList = null,
             DocumentationCommentList documentationCommentList = null,
@@ -30,6 +34,7 @@ namespace DevOps.Primitives.TypeScript
         {
             Identifier = identifier;
             Namespace = _namespace;
+            Export = export;
             ModifierList = modifierList;
             ImportStatementList = importStatementList;
             DocumentationCommentList = documentationCommentList;
@@ -45,6 +50,7 @@ namespace DevOps.Primitives.TypeScript
         public TypeDeclaration(
             string identifier,
             string @namespace,
+            bool export = true,
             ModifierList modifierList = null,
             ImportStatementList importStatementList = null,
             DocumentationCommentList documentationCommentList = null,
@@ -59,6 +65,7 @@ namespace DevOps.Primitives.TypeScript
             : this(
                   new Identifier(identifier),
                   new Namespace(@namespace),
+                  export,
                   modifierList,
                   importStatementList,
                   documentationCommentList,
@@ -103,49 +110,70 @@ namespace DevOps.Primitives.TypeScript
         public int? DocumentationCommentListId { get; set; }
 
         [ProtoMember(12)]
-        public FieldList FieldList { get; set; }
+        public bool Export { get; set; }
+
         [ProtoMember(13)]
+        public FieldList FieldList { get; set; }
+        [ProtoMember(14)]
         public int? FieldListId { get; set; }
 
-        [ProtoMember(14)]
-        public Identifier Identifier { get; set; }
         [ProtoMember(15)]
+        public Identifier Identifier { get; set; }
+        [ProtoMember(16)]
         public int IdentifierId { get; set; }
 
-        [ProtoMember(16)]
-        public MethodList MethodList { get; set; }
         [ProtoMember(17)]
+        public ImportStatementList ImportStatementList { get; set; }
+        [ProtoMember(18)]
+        public int? ImportStatementListId { get; set; }
+
+        [ProtoMember(19)]
+        public MethodList MethodList { get; set; }
+        [ProtoMember(20)]
         public int? MethodListId { get; set; }
 
-        [ProtoMember(18)]
+        [ProtoMember(21)]
         public ModifierList ModifierList { get; set; }
-        [ProtoMember(19)]
+        [ProtoMember(22)]
         public byte? ModifierListId { get; set; }
 
-        [ProtoMember(20)]
+        [ProtoMember(23)]
         public Namespace Namespace { get; set; }
-        [ProtoMember(21)]
+        [ProtoMember(24)]
         public int NamespaceId { get; set; }
 
-        [ProtoMember(22)]
+        [ProtoMember(25)]
         public PropertyList PropertyList { get; set; }
-        [ProtoMember(23)]
+        [ProtoMember(26)]
         public int? PropertyListId { get; set; }
 
-        [ProtoMember(24)]
-        public TypeParameterList TypeParameterList { get; set; }
-        [ProtoMember(25)]
-        public int? TypeParameterListId { get; set; }
-
-        [ProtoMember(26)]
-        public ImportStatementList ImportStatementList { get; set; }
         [ProtoMember(27)]
-        public int? ImportStatementListId { get; set; }
+        public TypeParameterList TypeParameterList { get; set; }
+        [ProtoMember(28)]
+        public int? TypeParameterListId { get; set; }
 
         public string GetNamespace()
             => Namespace.Identifier.Name.Value;
 
-        public override string ToString() => $"{GetTypeDeclaration()}\r\n";
+        public override string ToString()
+        {
+            var stringBuilder = new StringBuilder();
+
+            var imports = ImportStatementList?.GetRecords();
+            if (Any(imports))
+                foreach (var import in imports)
+                    stringBuilder.AppendLine(import.GetImportStatementSyntax());
+
+            var declaration = GetTypeDeclaration();
+            if (Export) declaration = $"export {declaration}";
+            if (Namespace != null) declaration = Namespace.GetNamespaceSyntax(declaration);
+
+            return stringBuilder
+                .AppendLine()
+                .AppendLine(declaration)
+                .AppendLine()
+                .ToString();
+        }
 
         protected virtual string GetTypeDeclaration() => string.Empty;
     }

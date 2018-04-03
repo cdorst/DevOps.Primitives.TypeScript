@@ -56,6 +56,10 @@ namespace DevOps.Primitives.TypeScript.EntityFramework.Services
             _typeParameterLists = typeParameterLists ?? throw new ArgumentNullException(nameof(typeParameterLists));
         }
 
+        protected override Action<ClassDeclaration, ClassDeclaration> AssignChanges
+            => (existing, given)
+                => existing.Export = given.Export;
+
         protected override async Task<ClassDeclaration> AssignUpsertedReferences(ClassDeclaration record)
         {
             record.AttributeListCollection = await _attributeLists.UpsertAsync(record.AttributeListCollection);
