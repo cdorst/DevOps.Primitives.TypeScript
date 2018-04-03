@@ -17,7 +17,7 @@ namespace DevOps.Primitives.TypeScript
             Identifier identifier,
             Namespace _namespace,
             ModifierList modifierList = null,
-            ImportStatementList ImportStatementList = null,
+            ImportStatementList importStatementList = null,
             DocumentationCommentList documentationCommentList = null,
             DecoratorList attributeListCollection = null,
             TypeParameterList typeParameterList = null,
@@ -31,7 +31,7 @@ namespace DevOps.Primitives.TypeScript
             Identifier = identifier;
             Namespace = _namespace;
             ModifierList = modifierList;
-            ImportStatementList = ImportStatementList;
+            ImportStatementList = importStatementList;
             DocumentationCommentList = documentationCommentList;
             AttributeListCollection = attributeListCollection;
             TypeParameterList = typeParameterList;
@@ -46,7 +46,7 @@ namespace DevOps.Primitives.TypeScript
             string identifier,
             string @namespace,
             ModifierList modifierList = null,
-            ImportStatementList ImportStatementList = null,
+            ImportStatementList importStatementList = null,
             DocumentationCommentList documentationCommentList = null,
             DecoratorList attributeListCollection = null,
             TypeParameterList typeParameterList = null,
@@ -60,7 +60,7 @@ namespace DevOps.Primitives.TypeScript
                   new Identifier(identifier),
                   new Namespace(@namespace),
                   modifierList,
-                  ImportStatementList,
+                  importStatementList,
                   documentationCommentList,
                   attributeListCollection,
                   typeParameterList,
