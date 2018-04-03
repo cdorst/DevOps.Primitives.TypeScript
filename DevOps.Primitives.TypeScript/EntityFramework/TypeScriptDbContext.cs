@@ -48,6 +48,9 @@ namespace DevOps.Primitives.TypeScript.EntityFramework
         public DbSet<FieldList> FieldLists { get; set; }
         public DbSet<FieldListAssociation> FieldListAssociations { get; set; }
         public DbSet<Identifier> Identifiers { get; set; }
+        public DbSet<ImportStatement> ImportStatements { get; set; }
+        public DbSet<ImportStatementList> ImportStatementLists { get; set; }
+        public DbSet<ImportStatementListAssociation> ImportStatementListAssociations { get; set; }
         public DbSet<InterfaceDeclaration> InterfaceDeclarations { get; set; }
         public DbSet<Method> Methods { get; set; }
         public DbSet<MethodList> MethodLists { get; set; }
@@ -72,9 +75,6 @@ namespace DevOps.Primitives.TypeScript.EntityFramework
         public DbSet<TypeParameter> TypeParameters { get; set; }
         public DbSet<TypeParameterList> TypeParameterLists { get; set; }
         public DbSet<TypeParameterListAssociation> TypeParameterListAssociations { get; set; }
-        public DbSet<UsingDirective> UsingDirectives { get; set; }
-        public DbSet<UsingDirectiveList> UsingDirectiveLists { get; set; }
-        public DbSet<UsingDirectiveListAssociation> UsingDirectiveListAssociations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -158,6 +158,12 @@ namespace DevOps.Primitives.TypeScript.EntityFramework
                 .HasIndex(e => new { e.FieldId, e.FieldListId }).IsUnique();
             modelBuilder.Entity<Identifier>()
                 .HasIndex(e => new { e.NameId }).IsUnique();
+            modelBuilder.Entity<ImportStatement>()
+                .HasIndex(e => new { e.ExportNameId, e.ModuleNameId }).IsUnique();
+            modelBuilder.Entity<ImportStatementList>()
+                .HasIndex(e => new { e.ListIdentifierId }).IsUnique();
+            modelBuilder.Entity<ImportStatementListAssociation>()
+                .HasIndex(e => new { e.ImportStatementId, e.ImportStatementListId }).IsUnique();
             modelBuilder.Entity<Method>()
                 .HasIndex(e => new { e.ArrowClauseExpressionValueId, e.AttributeListCollectionId, e.BlockId, e.ConstraintClauseListId, e.DocumentationCommentListId, e.IdentifierId, e.ModifierListId, e.ParameterListId, e.TypeId, e.TypeParameterListId }).IsUnique();
             modelBuilder.Entity<MethodList>()
@@ -204,12 +210,6 @@ namespace DevOps.Primitives.TypeScript.EntityFramework
                 .HasIndex(e => new { e.ListIdentifierId }).IsUnique();
             modelBuilder.Entity<TypeParameterListAssociation>()
                 .HasIndex(e => new { e.TypeParameterId, e.TypeParameterListId }).IsUnique();
-            modelBuilder.Entity<UsingDirective>()
-                .HasIndex(e => new { e.IdentifierId }).IsUnique();
-            modelBuilder.Entity<UsingDirectiveList>()
-                .HasIndex(e => new { e.ListIdentifierId }).IsUnique();
-            modelBuilder.Entity<UsingDirectiveListAssociation>()
-                .HasIndex(e => new { e.UsingDirectiveId, e.UsingDirectiveListId }).IsUnique();
         }
     }
 }

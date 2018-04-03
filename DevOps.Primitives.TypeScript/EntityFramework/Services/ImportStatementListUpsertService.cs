@@ -8,32 +8,32 @@ using System.Threading.Tasks;
 
 namespace DevOps.Primitives.TypeScript.EntityFramework.Services
 {
-    public class UsingDirectiveListUpsertService<TDbContext> : UpsertService<TDbContext, UsingDirectiveList>
+    public class ImportStatementListUpsertService<TDbContext> : UpsertService<TDbContext, ImportStatementList>
         where TDbContext : TypeScriptDbContext
     {
         private readonly IUpsertService<TDbContext, AsciiStringReference> _strings;
 
-        public UsingDirectiveListUpsertService(ICacheService<UsingDirectiveList> cache, TDbContext database, ILogger<UpsertService<TDbContext, UsingDirectiveList>> logger, IUpsertService<TDbContext, AsciiStringReference> strings)
-            : base(cache, database, logger, database.UsingDirectiveLists)
+        public ImportStatementListUpsertService(ICacheService<ImportStatementList> cache, TDbContext database, ILogger<UpsertService<TDbContext, ImportStatementList>> logger, IUpsertService<TDbContext, AsciiStringReference> strings)
+            : base(cache, database, logger, database.ImportStatementLists)
         {
-            CacheKey = record => $"{nameof(TypeScript)}.{nameof(UsingDirectiveList)}={record.ListIdentifierId}";
+            CacheKey = record => $"{nameof(TypeScript)}.{nameof(ImportStatementList)}={record.ListIdentifierId}";
             _strings = strings ?? throw new ArgumentNullException(nameof(strings));
         }
 
-        protected override async Task<UsingDirectiveList> AssignUpsertedReferences(UsingDirectiveList record)
+        protected override async Task<ImportStatementList> AssignUpsertedReferences(ImportStatementList record)
         {
             record.ListIdentifier = await _strings.UpsertAsync(record.ListIdentifier);
             record.ListIdentifierId = record.ListIdentifier?.AsciiStringReferenceId ?? record.ListIdentifierId;
             return record;
         }
 
-        protected override IEnumerable<object> EnumerateReferences(UsingDirectiveList record)
+        protected override IEnumerable<object> EnumerateReferences(ImportStatementList record)
         {
-            yield return record.UsingDirectiveListAssociations;
+            yield return record.ImportStatementListAssociations;
             yield return record.ListIdentifier;
         }
 
-        protected override Expression<Func<UsingDirectiveList, bool>> FindExisting(UsingDirectiveList record)
+        protected override Expression<Func<ImportStatementList, bool>> FindExisting(ImportStatementList record)
             => existing => existing.ListIdentifierId == record.ListIdentifierId;
     }
 }

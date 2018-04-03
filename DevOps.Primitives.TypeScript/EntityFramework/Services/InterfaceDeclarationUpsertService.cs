@@ -17,12 +17,12 @@ namespace DevOps.Primitives.TypeScript.EntityFramework.Services
         private readonly IUpsertUniqueListService<TDbContext, DocumentationComment, DocumentationCommentList, DocumentationCommentListAssociation> _documentationCommentLists;
         private readonly IUpsertUniqueListService<TDbContext, Field, FieldList, FieldListAssociation> _fieldLists;
         private readonly IUpsertService<TDbContext, Identifier> _identifiers;
+        private readonly IUpsertUniqueListService<TDbContext, ImportStatement, ImportStatementList, ImportStatementListAssociation> _importStatementLists;
         private readonly IUpsertUniqueListService<TDbContext, Method, MethodList, MethodListAssociation> _methodLists;
         private readonly IUpsertUniqueListService<TDbContext, SyntaxToken, ModifierList, ModifierListAssociation> _modifierLists;
         private readonly IUpsertService<TDbContext, Namespace> _namespaces;
         private readonly IUpsertUniqueListService<TDbContext, Property, PropertyList, PropertyListAssociation> _propertyLists;
         private readonly IUpsertUniqueListService<TDbContext, TypeParameter, TypeParameterList, TypeParameterListAssociation> _typeParameterLists;
-        private readonly IUpsertUniqueListService<TDbContext, UsingDirective, UsingDirectiveList, UsingDirectiveListAssociation> _usingDirectiveLists;
 
         public InterfaceDeclarationUpsertService(ICacheService<InterfaceDeclaration> cache, TDbContext database, ILogger<UpsertService<TDbContext, InterfaceDeclaration>> logger,
             IUpsertUniqueListService<TDbContext, Decorator, DecoratorList, DecoratorListAssociation> attributeLists,
@@ -32,15 +32,15 @@ namespace DevOps.Primitives.TypeScript.EntityFramework.Services
             IUpsertUniqueListService<TDbContext, DocumentationComment, DocumentationCommentList, DocumentationCommentListAssociation> documentationCommentLists,
             IUpsertUniqueListService<TDbContext, Field, FieldList, FieldListAssociation> fieldLists,
             IUpsertService<TDbContext, Identifier> identifiers,
+            IUpsertUniqueListService<TDbContext, ImportStatement, ImportStatementList, ImportStatementListAssociation> importStatementLists,
             IUpsertUniqueListService<TDbContext, Method, MethodList, MethodListAssociation> methodLists,
             IUpsertUniqueListService<TDbContext, SyntaxToken, ModifierList, ModifierListAssociation> modifierLists,
             IUpsertService<TDbContext, Namespace> namespaces,
             IUpsertUniqueListService<TDbContext, Property, PropertyList, PropertyListAssociation> propertyLists,
-            IUpsertUniqueListService<TDbContext, TypeParameter, TypeParameterList, TypeParameterListAssociation> typeParameterLists,
-            IUpsertUniqueListService<TDbContext, UsingDirective, UsingDirectiveList, UsingDirectiveListAssociation> usingDirectiveLists)
+            IUpsertUniqueListService<TDbContext, TypeParameter, TypeParameterList, TypeParameterListAssociation> typeParameterLists)
             : base(cache, database, logger, database.InterfaceDeclarations)
         {
-            CacheKey = record => $"{nameof(TypeScript)}.{nameof(InterfaceDeclaration)}={record.AttributeListCollectionId}:{record.BaseListId}:{record.ConstraintClauseListId}:{record.ConstructorListId}:{record.DocumentationCommentListId}:{record.FieldListId}:{record.IdentifierId}:{record.MethodListId}:{record.ModifierListId}:{record.NamespaceId}:{record.PropertyListId}:{record.TypeParameterListId}:{record.UsingDirectiveListId}";
+            CacheKey = record => $"{nameof(TypeScript)}.{nameof(InterfaceDeclaration)}={record.AttributeListCollectionId}:{record.BaseListId}:{record.ConstraintClauseListId}:{record.ConstructorListId}:{record.DocumentationCommentListId}:{record.FieldListId}:{record.IdentifierId}:{record.ImportStatementListId}:{record.MethodListId}:{record.ModifierListId}:{record.NamespaceId}:{record.PropertyListId}:{record.TypeParameterListId}";
             _attributeLists = attributeLists ?? throw new ArgumentNullException(nameof(attributeLists));
             _baseLists = baseLists ?? throw new ArgumentNullException(nameof(baseLists));
             _constraintClauseLists = constraintClauseLists ?? throw new ArgumentNullException(nameof(constraintClauseLists));
@@ -48,12 +48,12 @@ namespace DevOps.Primitives.TypeScript.EntityFramework.Services
             _documentationCommentLists = documentationCommentLists ?? throw new ArgumentNullException(nameof(documentationCommentLists));
             _fieldLists = fieldLists ?? throw new ArgumentNullException(nameof(fieldLists));
             _identifiers = identifiers ?? throw new ArgumentNullException(nameof(identifiers));
+            _importStatementLists = importStatementLists ?? throw new ArgumentNullException(nameof(importStatementLists));
             _methodLists = methodLists ?? throw new ArgumentNullException(nameof(methodLists));
             _modifierLists = modifierLists ?? throw new ArgumentNullException(nameof(modifierLists));
             _namespaces = namespaces ?? throw new ArgumentNullException(nameof(namespaces));
             _propertyLists = propertyLists ?? throw new ArgumentNullException(nameof(propertyLists));
             _typeParameterLists = typeParameterLists ?? throw new ArgumentNullException(nameof(typeParameterLists));
-            _usingDirectiveLists = usingDirectiveLists ?? throw new ArgumentNullException(nameof(usingDirectiveLists));
         }
 
         protected override async Task<InterfaceDeclaration> AssignUpsertedReferences(InterfaceDeclaration record)
@@ -72,6 +72,8 @@ namespace DevOps.Primitives.TypeScript.EntityFramework.Services
             record.FieldListId = record.FieldList?.FieldListId ?? record.FieldListId;
             record.Identifier = await _identifiers.UpsertAsync(record.Identifier);
             record.IdentifierId = record.Identifier?.IdentifierId ?? record.IdentifierId;
+            record.ImportStatementList = await _importStatementLists.UpsertAsync(record.ImportStatementList);
+            record.ImportStatementListId = record.ImportStatementList?.ImportStatementListId ?? record.ImportStatementListId;
             record.MethodList = await _methodLists.UpsertAsync(record.MethodList);
             record.MethodListId = record.MethodList?.MethodListId ?? record.MethodListId;
             record.ModifierList = await _modifierLists.UpsertAsync(record.ModifierList);
@@ -82,8 +84,6 @@ namespace DevOps.Primitives.TypeScript.EntityFramework.Services
             record.PropertyListId = record.PropertyList?.PropertyListId ?? record.PropertyListId;
             record.TypeParameterList = await _typeParameterLists.UpsertAsync(record.TypeParameterList);
             record.TypeParameterListId = record.TypeParameterList?.TypeParameterListId ?? record.TypeParameterListId;
-            record.UsingDirectiveList = await _usingDirectiveLists.UpsertAsync(record.UsingDirectiveList);
-            record.UsingDirectiveListId = record.UsingDirectiveList?.UsingDirectiveListId ?? record.UsingDirectiveListId;
             return record;
         }
 
@@ -96,12 +96,12 @@ namespace DevOps.Primitives.TypeScript.EntityFramework.Services
             yield return record.DocumentationCommentList;
             yield return record.FieldList;
             yield return record.Identifier;
+            yield return record.ImportStatementList;
             yield return record.MethodList;
             yield return record.ModifierList;
             yield return record.Namespace;
             yield return record.PropertyList;
             yield return record.TypeParameterList;
-            yield return record.UsingDirectiveList;
         }
 
         protected override Expression<Func<InterfaceDeclaration, bool>> FindExisting(InterfaceDeclaration record)

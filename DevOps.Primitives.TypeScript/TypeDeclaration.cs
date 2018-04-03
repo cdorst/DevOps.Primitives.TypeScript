@@ -17,7 +17,7 @@ namespace DevOps.Primitives.TypeScript
             Identifier identifier,
             Namespace _namespace,
             ModifierList modifierList = null,
-            UsingDirectiveList usingDirectiveList = null,
+            ImportStatementList ImportStatementList = null,
             DocumentationCommentList documentationCommentList = null,
             DecoratorList attributeListCollection = null,
             TypeParameterList typeParameterList = null,
@@ -31,7 +31,7 @@ namespace DevOps.Primitives.TypeScript
             Identifier = identifier;
             Namespace = _namespace;
             ModifierList = modifierList;
-            UsingDirectiveList = usingDirectiveList;
+            ImportStatementList = ImportStatementList;
             DocumentationCommentList = documentationCommentList;
             AttributeListCollection = attributeListCollection;
             TypeParameterList = typeParameterList;
@@ -46,7 +46,7 @@ namespace DevOps.Primitives.TypeScript
             string identifier,
             string @namespace,
             ModifierList modifierList = null,
-            UsingDirectiveList usingDirectiveList = null,
+            ImportStatementList ImportStatementList = null,
             DocumentationCommentList documentationCommentList = null,
             DecoratorList attributeListCollection = null,
             TypeParameterList typeParameterList = null,
@@ -60,7 +60,7 @@ namespace DevOps.Primitives.TypeScript
                   new Identifier(identifier),
                   new Namespace(@namespace),
                   modifierList,
-                  usingDirectiveList,
+                  ImportStatementList,
                   documentationCommentList,
                   attributeListCollection,
                   typeParameterList,
@@ -138,9 +138,9 @@ namespace DevOps.Primitives.TypeScript
         public int? TypeParameterListId { get; set; }
 
         [ProtoMember(26)]
-        public UsingDirectiveList UsingDirectiveList { get; set; }
+        public ImportStatementList ImportStatementList { get; set; }
         [ProtoMember(27)]
-        public int? UsingDirectiveListId { get; set; }
+        public int? ImportStatementListId { get; set; }
 
         public string GetNamespace()
             => Namespace.Identifier.Name.Value;

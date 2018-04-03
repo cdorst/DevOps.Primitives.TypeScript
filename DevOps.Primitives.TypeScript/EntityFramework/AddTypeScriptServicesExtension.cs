@@ -50,6 +50,9 @@ namespace DevOps.Primitives.TypeScript.EntityFramework
                 .AddScoped<IUpsertService<TDbContext, FieldList>, FieldListUpsertService<TDbContext>>()
                 .AddScoped<IUpsertService<TDbContext, Field>, FieldUpsertService<TDbContext>>()
                 .AddScoped<IUpsertService<TDbContext, Identifier>, IdentifierUpsertService<TDbContext>>()
+                .AddScoped<IUpsertService<TDbContext, ImportStatementListAssociation>, ImportStatementListAssociationUpsertService<TDbContext>>()
+                .AddScoped<IUpsertService<TDbContext, ImportStatementList>, ImportStatementListUpsertService<TDbContext>>()
+                .AddScoped<IUpsertService<TDbContext, ImportStatement>, ImportStatementUpsertService<TDbContext>>()
                 .AddScoped<IUpsertService<TDbContext, InterfaceDeclaration>, InterfaceDeclarationUpsertService<TDbContext>>()
                 .AddScoped<IUpsertService<TDbContext, MethodListAssociation>, MethodListAssociationUpsertService<TDbContext>>()
                 .AddScoped<IUpsertService<TDbContext, MethodList>, MethodListUpsertService<TDbContext>>()
@@ -72,9 +75,6 @@ namespace DevOps.Primitives.TypeScript.EntityFramework
                 .AddScoped<IUpsertService<TDbContext, TypeArgument>, TypeArgumentUpsertService<TDbContext>>()
                 .AddScoped<IUpsertService<TDbContext, TypeParameterListAssociation>, TypeParameterListAssociationUpsertService<TDbContext>>()
                 .AddScoped<IUpsertService<TDbContext, TypeParameterList>, TypeParameterListUpsertService<TDbContext>>()
-                .AddScoped<IUpsertService<TDbContext, TypeParameter>, TypeParameterUpsertService<TDbContext>>()
-                .AddScoped<IUpsertService<TDbContext, UsingDirectiveListAssociation>, UsingDirectiveListAssociationUpsertService<TDbContext>>()
-                .AddScoped<IUpsertService<TDbContext, UsingDirectiveList>, UsingDirectiveListUpsertService<TDbContext>>()
-                .AddScoped<IUpsertService<TDbContext, UsingDirective>, UsingDirectiveUpsertService<TDbContext>>();
+                .AddScoped<IUpsertService<TDbContext, TypeParameter>, TypeParameterUpsertService<TDbContext>>();
     }
 }
