@@ -21,5 +21,7 @@ namespace DevOps.Primitives.TypeScript
         public AsciiStringReference Name { get; set; }
         [ProtoMember(3)]
         public int NameId { get; set; }
+
+        public string GetValue() => Name.Value;
     }
 }
