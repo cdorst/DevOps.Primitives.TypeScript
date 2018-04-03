@@ -27,7 +27,7 @@ namespace DevOps.Primitives.TypeScript
             TypeParameterList typeParameterList = null,
             ConstraintClauseList constraintClauseList = null,
             BaseList baseList = null,
-            ConstructorList constructorList = null,
+            Constructor constructor = null,
             FieldList fieldList = null,
             MethodList methodList = null,
             PropertyList propertyList = null)
@@ -42,7 +42,7 @@ namespace DevOps.Primitives.TypeScript
             TypeParameterList = typeParameterList;
             ConstraintClauseList = constraintClauseList;
             BaseList = baseList;
-            ConstructorList = constructorList;
+            Constructor = constructor;
             FieldList = fieldList;
             MethodList = methodList;
             PropertyList = propertyList;
@@ -58,7 +58,7 @@ namespace DevOps.Primitives.TypeScript
             TypeParameterList typeParameterList = null,
             ConstraintClauseList constraintClauseList = null,
             BaseList baseList = null,
-            ConstructorList constructorList = null,
+            Constructor constructor = null,
             FieldList fieldList = null,
             MethodList methodList = null,
             PropertyList propertyList = null)
@@ -73,7 +73,7 @@ namespace DevOps.Primitives.TypeScript
                   typeParameterList,
                   constraintClauseList,
                   baseList,
-                  constructorList,
+                  constructor,
                   fieldList,
                   methodList,
                   propertyList)
@@ -100,9 +100,9 @@ namespace DevOps.Primitives.TypeScript
         public int? ConstraintClauseListId { get; set; }
 
         [ProtoMember(8)]
-        public ConstructorList ConstructorList { get; set; }
+        public Constructor Constructor { get; set; }
         [ProtoMember(9)]
-        public int? ConstructorListId { get; set; }
+        public int? ConstructorId { get; set; }
 
         [ProtoMember(10)]
         public DocumentationCommentList DocumentationCommentList { get; set; }

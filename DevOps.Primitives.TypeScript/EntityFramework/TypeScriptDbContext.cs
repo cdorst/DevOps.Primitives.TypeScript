@@ -117,7 +117,7 @@ namespace DevOps.Primitives.TypeScript.EntityFramework
             modelBuilder.Entity<ConstraintListAssociation>()
                 .HasIndex(e => new { e.ConstraintId, e.ConstraintListId }).IsUnique();
             modelBuilder.Entity<Constructor>()
-                .HasIndex(e => new { e.DecoratorListId, e.BlockId, e.DocumentationCommentListId, e.IdentifierId, e.ModifierListId, e.ParameterListId }).IsUnique();
+                .HasIndex(e => new { e.DecoratorListId, e.BlockId, e.DocumentationCommentListId, e.IdentifierId, e.ParameterListId }).IsUnique();
             modelBuilder.Entity<ConstructorList>()
                 .HasIndex(e => new { e.ListIdentifierId }).IsUnique();
             modelBuilder.Entity<ConstructorListAssociation>()

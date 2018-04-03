@@ -13,14 +13,12 @@ namespace DevOps.Primitives.TypeScript
         public Constructor(
             Identifier identifier,
             Block block,
-            ModifierList modifierList = null,
             ParameterList parameterList = null,
             DocumentationCommentList documentationCommentList = null,
             DecoratorList decoratorList = null)
         {
             Identifier = identifier;
             Block = block;
-            ModifierList = modifierList;
             ParameterList = parameterList;
             DocumentationCommentList = documentationCommentList;
             DecoratorList = decoratorList;
@@ -28,11 +26,10 @@ namespace DevOps.Primitives.TypeScript
         public Constructor(
             string identifier,
             Block block,
-            ModifierList modifierList = null,
             ParameterList parameterList = null,
             DocumentationCommentList documentationCommentList = null,
             DecoratorList decoratorList = null)
-            : this(new Identifier(identifier), block, modifierList, parameterList, documentationCommentList, decoratorList)
+            : this(new Identifier(identifier), block, parameterList, documentationCommentList, decoratorList)
         {
         }
 
@@ -61,13 +58,8 @@ namespace DevOps.Primitives.TypeScript
         public int IdentifierId { get; set; }
 
         [ProtoMember(10)]
-        public ModifierList ModifierList { get; set; }
-        [ProtoMember(11)]
-        public byte? ModifierListId { get; set; }
-
-        [ProtoMember(12)]
         public ParameterList ParameterList { get; set; }
-        [ProtoMember(13)]
+        [ProtoMember(11)]
         public int? ParameterListId { get; set; }
     }
 }

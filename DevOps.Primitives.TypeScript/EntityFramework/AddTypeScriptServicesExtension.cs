@@ -32,8 +32,6 @@ namespace DevOps.Primitives.TypeScript.EntityFramework
                 .AddScoped<IUpsertService<TDbContext, ConstraintListAssociation>, ConstraintListAssociationUpsertService<TDbContext>>()
                 .AddScoped<IUpsertService<TDbContext, ConstraintList>, ConstraintListUpsertService<TDbContext>>()
                 .AddScoped<IUpsertService<TDbContext, Constraint>, ConstraintUpsertService<TDbContext>>()
-                .AddScoped<IUpsertService<TDbContext, ConstructorListAssociation>, ConstructorListAssociationUpsertService<TDbContext>>()
-                .AddScoped<IUpsertService<TDbContext, ConstructorList>, ConstructorListUpsertService<TDbContext>>()
                 .AddScoped<IUpsertService<TDbContext, Constructor>, ConstructorUpsertService<TDbContext>>()
                 .AddScoped<IUpsertService<TDbContext, DocumentationCommentAttributeListAssociation>, DocumentationCommentAttributeListAssociationUpsertService<TDbContext>>()
                 .AddScoped<IUpsertService<TDbContext, DocumentationCommentAttributeList>, DocumentationCommentAttributeListUpsertService<TDbContext>>()
