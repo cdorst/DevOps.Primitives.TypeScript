@@ -1,5 +1,4 @@
 ﻿using ProtoBuf;
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
@@ -26,14 +25,10 @@ namespace DevOps.Primitives.TypeScript
 
         public string GetNamespaceSyntax(string declarations)
         {
-            var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"namespace {Identifier.GetValue()} {{");
+            var stringBuilder = new StringBuilder().Append($"namespace {Identifier} {{");
             if (!string.IsNullOrWhiteSpace(declarations))
-            {
-                var lines = declarations.Split(new[] { NewLine }, StringSplitOptions.None);
-                foreach (var line in lines)
+                foreach (var line in declarations.SplitLines())
                     stringBuilder.AppendLine($"{Indent}{line}");
-            }
             return stringBuilder.AppendLine(CloseCurlyBrace).ToString();
         }
     }
