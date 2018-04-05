@@ -5,10 +5,11 @@ using ProtoBuf;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using static DevOps.Primitives.TypeScript.StringConstants;
 
 namespace DevOps.Primitives.TypeScript
 {
-    /// <remarks>Each instance represents a collection of attribute lists. Each attribute list contains a single attribute</remarks>
     [ProtoContract]
     [Table("DecoratorLists", Schema = nameof(TypeScript))]
     public class DecoratorList : IUniqueList<Decorator, DecoratorListAssociation>
@@ -34,7 +35,7 @@ namespace DevOps.Primitives.TypeScript
 
         [Key]
         [ProtoMember(1)]
-        public int AttributeListCollectionId { get; set; }
+        public int DecoratorListId { get; set; }
 
         [ProtoMember(2)]
         public AsciiStringReference ListIdentifier { get; set; }
@@ -52,5 +53,8 @@ namespace DevOps.Primitives.TypeScript
             ListIdentifier = new AsciiStringReference(
                 UniqueListIdentifierFactory<Decorator>.Create(records, r => r.DecoratorId));
         }
+
+        public string GetInlineDecoratorListSyntax()
+            => string.Join(Space, this.GetRecords().Select(decorator => decorator.GetDecoratorSyntax()));
     }
 }
