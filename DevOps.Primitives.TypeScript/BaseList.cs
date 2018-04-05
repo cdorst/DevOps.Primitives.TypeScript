@@ -1,10 +1,13 @@
 ﻿using Common.EntityFrameworkServices;
 using Common.EntityFrameworkServices.Factories;
+using Common.EnumStringValues;
 using DevOps.Primitives.Strings;
 using ProtoBuf;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using static DevOps.Primitives.TypeScript.StringConstants;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -51,5 +54,8 @@ namespace DevOps.Primitives.TypeScript
             ListIdentifier = new AsciiStringReference(
                 UniqueListIdentifierFactory<BaseType>.Create(records, r => r.BaseTypeId));
         }
+
+        public string GetBaseListSyntax(BaseListKind listKind)
+            => $"{listKind.GetStringValue()} {string.Join(CommaSpace, this.GetRecords().Select(each => each.GetBaseTypeSyntax()))}";
     }
 }
