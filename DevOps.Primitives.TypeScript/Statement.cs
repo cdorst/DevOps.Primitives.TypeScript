@@ -22,5 +22,8 @@ namespace DevOps.Primitives.TypeScript
         public AsciiMaxStringReference Text { get; set; }
         [ProtoMember(3)]
         public int TextId { get; set; }
+
+        public override string ToString()
+            => Text.Value;
     }
 }
