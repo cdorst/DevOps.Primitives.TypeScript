@@ -2,6 +2,7 @@
 using ProtoBuf;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static DevOps.Primitives.TypeScript.StringConstants;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -21,5 +22,13 @@ namespace DevOps.Primitives.TypeScript
         public AsciiMaxStringReference Expression { get; set; }
         [ProtoMember(3)]
         public int ExpressionId { get; set; }
+
+        public string GetDecoratorArgumentListExpressionSyntax()
+        {
+            var expression = Expression.Value;
+            if (!expression.StartsWith(OpenParenthesis)) expression = $"{OpenParenthesis}{expression}";
+            if (!expression.EndsWith(CloseParenthesis)) expression = $"{expression}{CloseParenthesis}";
+            return expression;
+        }
     }
 }
