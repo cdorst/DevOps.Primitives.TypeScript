@@ -21,5 +21,11 @@ namespace DevOps.Primitives.TypeScript
         public AsciiMaxStringReference Text { get; set; }
         [ProtoMember(3)]
         public int TextId { get; set; }
+
+        public string GetDefaultValueAssignmentSyntax()
+            => $" = {this}";
+
+        public override string ToString()
+            => Text.Value;
     }
 }
