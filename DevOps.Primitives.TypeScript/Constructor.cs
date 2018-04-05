@@ -1,7 +1,10 @@
 ﻿using Common.EntityFrameworkServices;
+using Common.EnumStringValues;
 using ProtoBuf;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
+using static DevOps.Primitives.TypeScript.StringConstants;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -13,23 +16,23 @@ namespace DevOps.Primitives.TypeScript
         public Constructor(
             Identifier identifier,
             Block block,
+            AccessModifiers? accessModifier = null,
             ParameterList parameterList = null,
-            DocumentationCommentList documentationCommentList = null,
             DecoratorList decoratorList = null)
         {
             Identifier = identifier;
             Block = block;
+            AccessModifier = accessModifier;
             ParameterList = parameterList;
-            DocumentationCommentList = documentationCommentList;
             DecoratorList = decoratorList;
         }
         public Constructor(
             string identifier,
             Block block,
+            AccessModifiers? accessModifier = null,
             ParameterList parameterList = null,
-            DocumentationCommentList documentationCommentList = null,
             DecoratorList decoratorList = null)
-            : this(new Identifier(identifier), block, parameterList, documentationCommentList, decoratorList)
+            : this(new Identifier(identifier), block, accessModifier, parameterList, decoratorList)
         {
         }
 
@@ -38,28 +41,40 @@ namespace DevOps.Primitives.TypeScript
         public int ConstructorId { get; set; }
 
         [ProtoMember(2)]
-        public Block Block { get; set; }
+        public AccessModifiers? AccessModifier { get; set; }
+
         [ProtoMember(3)]
+        public Block Block { get; set; }
+        [ProtoMember(4)]
         public int BlockId { get; set; }
 
-        [ProtoMember(4)]
-        public DecoratorList DecoratorList { get; set; }
         [ProtoMember(5)]
+        public DecoratorList DecoratorList { get; set; }
+        [ProtoMember(6)]
         public int? DecoratorListId { get; set; }
 
-        [ProtoMember(6)]
-        public DocumentationCommentList DocumentationCommentList { get; set; }
-        [ProtoMember(7)]
-        public int? DocumentationCommentListId { get; set; }
-
-        [ProtoMember(8)]
-        public Identifier Identifier { get; set; }
         [ProtoMember(9)]
+        public Identifier Identifier { get; set; }
+        [ProtoMember(10)]
         public int IdentifierId { get; set; }
 
-        [ProtoMember(10)]
-        public ParameterList ParameterList { get; set; }
         [ProtoMember(11)]
+        public ParameterList ParameterList { get; set; }
+        [ProtoMember(12)]
         public int? ParameterListId { get; set; }
+
+        public string GetConstructorSyntax(string typeName)
+        {
+            var modifier = AccessModifier == null ? string.Empty : $"{AccessModifier.GetStringValue()} ";
+            return $"{GetDocumentation(typeName, ParameterList)}{NewLine}{modifier}constructor({ParameterList?.GetParameterListSyntax()}) {Block.GetBlockSyntax()}";
+        }
+
+        private static string GetDocumentation(string typeName, ParameterList parameters)
+        {
+            var documentationBuilder = new StringBuilder().Append(OpenJsDoc).AppendLine($" * Create a new {typeName} instance");
+            foreach (var parameter in parameters?.GetRecords() ?? new Parameter[] { })
+                documentationBuilder.AppendLine($" * @param {parameter.Identifier} - {parameter.DocumentationComment}");
+            return documentationBuilder.AppendLine(CloseJsDoc).ToString();
+        }
     }
 }
