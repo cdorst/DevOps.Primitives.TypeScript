@@ -33,5 +33,8 @@ namespace DevOps.Primitives.TypeScript
         public TypeArgumentList TypeArgumentList { get; set; }
         [ProtoMember(5)]
         public int? TypeArgumentListId { get; set; }
+
+        public string GetBaseTypeSyntax()
+            => $"{Identifier}{TypeArgumentList?.GetTypeArgumentListSyntax()}";
     }
 }
