@@ -10,15 +10,16 @@ namespace DevOps.Primitives.TypeScript
     public class Parameter : IUniqueListRecord
     {
         public Parameter() { }
-        public Parameter(Identifier identifier, Identifier type, Expression defaultValue = null, DecoratorList attributeListCollection = null)
+        public Parameter(Identifier identifier, Identifier type, DocumentationComment comment, Expression defaultValue = null, DecoratorList decoratorList = null)
         {
+            DecoratorList = decoratorList;
+            DefaultValue = defaultValue;
+            DocumentationComment = comment;
             Identifier = identifier;
             Type = type;
-            DefaultValue = defaultValue;
-            AttributeListCollection = attributeListCollection;
         }
-        public Parameter(string identifier, string type, Expression defaultValue = null, DecoratorList attributeListCollection = null)
-            : this(new Identifier(identifier), new Identifier(type), defaultValue, attributeListCollection)
+        public Parameter(string identifier, string type, string comment, Expression defaultValue = null, DecoratorList decoratorList = null)
+            : this(new Identifier(identifier), new Identifier(type), new DocumentationComment(comment), defaultValue, decoratorList)
         {
         }
 
@@ -27,23 +28,40 @@ namespace DevOps.Primitives.TypeScript
         public int ParameterId { get; set; }
 
         [ProtoMember(2)]
-        public DecoratorList AttributeListCollection { get; set; }
-        [ProtoMember(3)]
-        public int? AttributeListCollectionId { get; set; }
+        public bool IsReadonly { get; set; }
 
+        [ProtoMember(3)]
+        public DecoratorList DecoratorList { get; set; }
         [ProtoMember(4)]
-        public Expression DefaultValue { get; set; }
+        public int? DecoratorListId { get; set; }
+
         [ProtoMember(5)]
+        public Expression DefaultValue { get; set; }
+        [ProtoMember(6)]
         public int? DefaultValueId { get; set; }
 
-        [ProtoMember(6)]
-        public Identifier Identifier { get; set; }
         [ProtoMember(7)]
+        public DocumentationComment DocumentationComment { get; set; }
+        [ProtoMember(8)]
+        public int DocumentationCommentId { get; set; }
+
+        [ProtoMember(9)]
+        public Identifier Identifier { get; set; }
+        [ProtoMember(10)]
         public int IdentifierId { get; set; }
 
-        [ProtoMember(8)]
+        [ProtoMember(11)]
         public Identifier Type { get; set; }
-        [ProtoMember(9)]
+        [ProtoMember(12)]
         public int TypeId { get; set; }
+
+        public string GetParameterSyntax()
+        {
+            var decorators = DecoratorList?.GetInlineDecoratorListSyntax();
+            if (!string.IsNullOrEmpty(decorators)) decorators = $"{decorators} ";
+            var modifier = IsReadonly ? "readonly " : string.Empty;
+            var assignment = DefaultValue == null ? string.Empty : $" = {DefaultValue}";
+            return $"{decorators}{modifier}{Identifier}: {Type}{assignment}";
+        }
     }
 }
