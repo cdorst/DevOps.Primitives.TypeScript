@@ -18,23 +18,27 @@ namespace DevOps.Primitives.TypeScript
         public PropertyListAssociation(
             Identifier identifier,
             Identifier type,
-            AccessorList accessorList,
-            ModifierList modifierList = null,
-            DocumentationCommentList documentationCommentList = null,
-            DecoratorList attributeListCollection = null,
+            DocumentationComment documentationComment,
+            AccessModifiers? accessModifier = null,
+            bool isStatic = false,
+            bool isReadonly = false,
+            DecoratorList decoratorList = null,
+            Expression defaultValue = null,
             PropertyList propertyList = null)
-            : this(new Property(identifier, type, accessorList, modifierList, documentationCommentList, attributeListCollection), propertyList)
+            : this(new Property(identifier, type, documentationComment, accessModifier, isStatic, isReadonly, decoratorList, defaultValue), propertyList)
         {
         }
         public PropertyListAssociation(
             string identifier,
             string type,
-            AccessorList accessorList,
-            ModifierList modifierList = null,
-            DocumentationCommentList documentationCommentList = null,
-            DecoratorList attributeListCollection = null,
+            string comment,
+            AccessModifiers? accessModifier = null,
+            bool isStatic = false,
+            bool isReadonly = false,
+            DecoratorList decoratorList = null,
+            Expression defaultValue = null,
             PropertyList propertyList = null)
-            : this(new Identifier(identifier), new Identifier(type), accessorList, modifierList, documentationCommentList, attributeListCollection, propertyList)
+            : this(new Identifier(identifier), new Identifier(type), new DocumentationComment(comment), accessModifier, isStatic, isReadonly, decoratorList, defaultValue, propertyList)
         {
         }
 
