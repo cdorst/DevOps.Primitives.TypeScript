@@ -22,6 +22,6 @@ namespace DevOps.Primitives.TypeScript
         [ProtoMember(3)]
         public int NameId { get; set; }
 
-        public string GetValue() => Name.Value;
+        public override string ToString() => Name.Value;
     }
 }
