@@ -25,23 +25,21 @@ namespace DevOps.Primitives.TypeScript
         public PropertyList(
             Identifier identifier,
             Identifier type,
-            AccessorList accessorList,
+            DocumentationComment documentationComment = null,
             ModifierList modifierList = null,
-            DocumentationCommentList documentationCommentList = null,
-            DecoratorList attributeListCollection = null,
+            DecoratorList decoratorList = null,
             AsciiStringReference listIdentifier = null)
-            : this(new PropertyListAssociation(identifier, type, accessorList, modifierList, documentationCommentList, attributeListCollection), listIdentifier)
+            : this(new PropertyListAssociation(identifier, type, documentationComment, modifierList, decoratorList), listIdentifier)
         {
         }
         public PropertyList(
             string identifier,
             string type,
-            AccessorList accessorList,
+            string comment,
             ModifierList modifierList = null,
-            DocumentationCommentList documentationCommentList = null,
-            DecoratorList attributeListCollection = null,
+            DecoratorList decoratorList = null,
             AsciiStringReference listIdentifier = null)
-            : this(new Identifier(identifier), new Identifier(type), accessorList, modifierList, documentationCommentList, attributeListCollection, listIdentifier)
+            : this(new Identifier(identifier), new Identifier(type), new DocumentationComment(comment), modifierList, decoratorList, listIdentifier)
         {
         }
 
