@@ -33,5 +33,8 @@ namespace DevOps.Primitives.TypeScript
         public DecoratorArgumentListExpression DecoratorArgumentListExpression { get; set; }
         [ProtoMember(5)]
         public int? DecoratorArgumentListExpressionId { get; set; }
+
+        public string GetDecoratorSyntax()
+            => $"@{Identifier}{DecoratorArgumentListExpression?.GetDecoratorArgumentListExpressionSyntax()}";
     }
 }
