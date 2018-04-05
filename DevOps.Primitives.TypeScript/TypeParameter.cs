@@ -21,5 +21,8 @@ namespace DevOps.Primitives.TypeScript
         public Identifier Identifier { get; set; }
         [ProtoMember(3)]
         public int IdentifierId { get; set; }
+
+        public string GetTypeParameterSyntax()
+            => Identifier.ToString();
     }
 }
