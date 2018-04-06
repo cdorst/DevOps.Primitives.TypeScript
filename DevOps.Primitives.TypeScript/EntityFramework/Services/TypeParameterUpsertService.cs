@@ -37,6 +37,6 @@ namespace DevOps.Primitives.TypeScript.EntityFramework.Services
         protected override Expression<Func<TypeParameter, bool>> FindExisting(TypeParameter record)
             => existing
                 => existing.IdentifierId == record.IdentifierId
-                && existing.ExtendsConstraintId == record.ExtendsConstraintId;
+                && ((existing.ExtendsConstraintId == null && record.ExtendsConstraintId == null) || (existing.ExtendsConstraintId == record.ExtendsConstraintId));
     }
 }

@@ -29,6 +29,9 @@ namespace DevOps.Primitives.TypeScript
         [ProtoMember(3)]
         public int TextId { get; set; }
 
+        public string ToSelfClosingJsDoc()
+            => $"/** {this} */";
+
         public override string ToString() => Text.Value;
     }
 }

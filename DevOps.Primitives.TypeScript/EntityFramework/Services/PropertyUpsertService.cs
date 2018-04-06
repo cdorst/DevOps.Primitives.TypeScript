@@ -10,44 +10,35 @@ namespace DevOps.Primitives.TypeScript.EntityFramework.Services
     public class PropertyUpsertService<TDbContext> : UpsertService<TDbContext, Property>
         where TDbContext : TypeScriptDbContext
     {
-        private readonly IUpsertUniqueListService<TDbContext, Accessor, AccessorList, AccessorListAssociation> _accessorLists;
-        private readonly IUpsertUniqueListService<TDbContext, Decorator, DecoratorList, DecoratorListAssociation> _attributeLists;
-        private readonly IUpsertUniqueListService<TDbContext, DocumentationComment, DocumentationCommentList, DocumentationCommentListAssociation> _documentationCommentLists;
+        private readonly IUpsertUniqueListService<TDbContext, Decorator, DecoratorList, DecoratorListAssociation> _decoratorLists;
+        private readonly IUpsertService<TDbContext, DocumentationComment> _documentationComments;
+        private readonly IUpsertService<TDbContext, Expression> _expressions;
         private readonly IUpsertService<TDbContext, Identifier> _identifiers;
-        private readonly IUpsertUniqueListService<TDbContext, SyntaxToken, ModifierList, ModifierListAssociation> _modifierLists;
 
         public PropertyUpsertService(ICacheService<Property> cache, TDbContext database, ILogger<UpsertService<TDbContext, Property>> logger,
-            IUpsertUniqueListService<TDbContext, Accessor, AccessorList, AccessorListAssociation> accessorLists,
-            IUpsertUniqueListService<TDbContext, Decorator, DecoratorList, DecoratorListAssociation> attributeLists,
-            IUpsertService<TDbContext, Block> blocks,
-            IUpsertUniqueListService<TDbContext, DocumentationComment, DocumentationCommentList, DocumentationCommentListAssociation> documentationCommentLists,
+            IUpsertUniqueListService<TDbContext, Decorator, DecoratorList, DecoratorListAssociation> decoratorLists,
+            IUpsertService<TDbContext, DocumentationComment> documentationComments,
             IUpsertService<TDbContext, Expression> expressions,
-            IUpsertService<TDbContext, Identifier> identifiers,
-            IUpsertUniqueListService<TDbContext, SyntaxToken, ModifierList, ModifierListAssociation> modifierLists,
-            IUpsertUniqueListService<TDbContext, Parameter, ParameterList, ParameterListAssociation> parameterLists,
-            IUpsertUniqueListService<TDbContext, TypeParameter, TypeParameterList, TypeParameterListAssociation> typeParameterLists)
+            IUpsertService<TDbContext, Identifier> identifiers)
             : base(cache, database, logger, database.Properties)
         {
-            CacheKey = record => $"{nameof(TypeScript)}.{nameof(Property)}={record.AccessorListId}:{record.AttributeListCollectionId}:{record.DocumentationCommentListId}:{record.IdentifierId}:{record.ModifierListId}:{record.TypeId}";
-            _accessorLists = accessorLists ?? throw new ArgumentNullException(nameof(accessorLists));
-            _attributeLists = attributeLists ?? throw new ArgumentNullException(nameof(attributeLists));
-            _documentationCommentLists = documentationCommentLists ?? throw new ArgumentNullException(nameof(documentationCommentLists));
+            CacheKey = record => $"{nameof(TypeScript)}.{nameof(Property)}={record.AccessModifier}:{record.IsStatic}:{record.IsReadonly}:{record.DecoratorListId}:{record.DocumentationCommentId}:{record.IdentifierId}:{record.TypeId}";
+            _decoratorLists = decoratorLists ?? throw new ArgumentNullException(nameof(decoratorLists));
+            _documentationComments = documentationComments ?? throw new ArgumentNullException(nameof(documentationComments));
+            _expressions = expressions ?? throw new ArgumentNullException(nameof(expressions));
             _identifiers = identifiers ?? throw new ArgumentNullException(nameof(identifiers));
-            _modifierLists = modifierLists ?? throw new ArgumentNullException(nameof(modifierLists));
         }
 
         protected override async Task<Property> AssignUpsertedReferences(Property record)
         {
-            record.AccessorList = await _accessorLists.UpsertAsync(record.AccessorList);
-            record.AccessorListId = record.AccessorList?.AccessorListId ?? record.AccessorListId;
-            record.AttributeListCollection = await _attributeLists.UpsertAsync(record.AttributeListCollection);
-            record.AttributeListCollectionId = record.AttributeListCollection?.AttributeListCollectionId ?? record.AttributeListCollectionId;
-            record.DocumentationCommentList = await _documentationCommentLists.UpsertAsync(record.DocumentationCommentList);
-            record.DocumentationCommentListId = record.DocumentationCommentList?.DocumentationCommentListId ?? record.DocumentationCommentListId;
+            record.DecoratorList = await _decoratorLists.UpsertAsync(record.DecoratorList);
+            record.DecoratorListId = record.DecoratorList?.DecoratorListId ?? record.DecoratorListId;
+            record.DocumentationComment = await _documentationComments.UpsertAsync(record.DocumentationComment);
+            record.DocumentationCommentId = record.DocumentationComment?.DocumentationCommentId ?? record.DocumentationCommentId;
+            record.DefaultValue = await _expressions.UpsertAsync(record.DefaultValue);
+            record.DefaultValueId = record.DefaultValue?.ExpressionId ?? record.DefaultValueId;
             record.Identifier = await _identifiers.UpsertAsync(record.Identifier);
             record.IdentifierId = record.Identifier?.IdentifierId ?? record.IdentifierId;
-            record.ModifierList = await _modifierLists.UpsertAsync(record.ModifierList);
-            record.ModifierListId = record.ModifierList?.ModifierListId ?? record.ModifierListId;
             record.Type = await _identifiers.UpsertAsync(record.Type);
             record.TypeId = record.Type?.IdentifierId ?? record.TypeId;
             return record;
@@ -55,21 +46,21 @@ namespace DevOps.Primitives.TypeScript.EntityFramework.Services
 
         protected override IEnumerable<object> EnumerateReferences(Property record)
         {
-            yield return record.AccessorList;
-            yield return record.AttributeListCollection;
-            yield return record.DocumentationCommentList;
+            yield return record.DecoratorList;
+            yield return record.DefaultValue;
+            yield return record.DocumentationComment;
             yield return record.Identifier;
-            yield return record.ModifierList;
             yield return record.Type;
         }
 
         protected override Expression<Func<Property, bool>> FindExisting(Property record)
             => existing
-                => existing.AccessorListId == record.AccessorListId
-                && ((existing.AttributeListCollectionId == null && record.AttributeListCollectionId == null) || (existing.AttributeListCollectionId == record.AttributeListCollectionId))
-                && ((existing.DocumentationCommentListId == null && record.DocumentationCommentListId == null) || (existing.DocumentationCommentListId == record.DocumentationCommentListId))
+                => ((existing.AccessModifier == null && record.AccessModifier == null) || (existing.AccessModifier == record.AccessModifier))
+                && existing.IsStatic == record.IsStatic
+                && existing.IsReadonly == record.IsReadonly
+                && ((existing.DecoratorListId == null && record.DecoratorListId == null) || (existing.DecoratorListId == record.DecoratorListId))
+                && existing.DocumentationCommentId == record.DocumentationCommentId
                 && existing.IdentifierId == record.IdentifierId
-                && ((existing.ModifierListId == null && record.ModifierListId == null) || (existing.ModifierListId == record.ModifierListId))
                 && existing.TypeId == record.TypeId;
     }
 }

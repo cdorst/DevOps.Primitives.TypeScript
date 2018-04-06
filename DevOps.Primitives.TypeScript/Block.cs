@@ -25,6 +25,7 @@ namespace DevOps.Primitives.TypeScript
 
         public string GetBlockSyntax()
         {
+            if (StatementList == null) return "{ }";
             var stringBuilder = new StringBuilder().Append(OpenCurlyBrace);
             foreach (var statement in StatementList.GetRecords()) stringBuilder.AppendLine($"{Indent}{statement}");
             return stringBuilder.AppendLine(CloseCurlyBrace).ToString();

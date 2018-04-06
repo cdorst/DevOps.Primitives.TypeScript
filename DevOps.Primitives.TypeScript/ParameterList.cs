@@ -24,12 +24,12 @@ namespace DevOps.Primitives.TypeScript
             : this(new List<ParameterListAssociation> { parameterListAssociation }, listIdentifier)
         {
         }
-        public ParameterList(Identifier identifier, Identifier type, Expression defaultValue = null, AsciiStringReference listIdentifier = null)
-            : this(new ParameterListAssociation(identifier, type, defaultValue), listIdentifier)
+        public ParameterList(Identifier identifier, Identifier type, DocumentationComment comment, Expression defaultValue = null, DecoratorList decoratorList = null, AsciiStringReference listIdentifier = null)
+            : this(new ParameterListAssociation(identifier, type, comment, defaultValue, decoratorList), listIdentifier)
         {
         }
-        public ParameterList(string identifier, string type, Expression defaultValue = null, AsciiStringReference listIdentifier = null)
-            : this(new Identifier(identifier), new Identifier(type), defaultValue, listIdentifier)
+        public ParameterList(string identifier, string type, string comment, Expression defaultValue = null, DecoratorList decoratorList = null, AsciiStringReference listIdentifier = null)
+            : this(new Identifier(identifier), new Identifier(type), new DocumentationComment(comment), defaultValue, decoratorList, listIdentifier)
         {
         }
 

@@ -15,16 +15,12 @@ namespace DevOps.Primitives.TypeScript
             Method = method;
             MethodList = methodList;
         }
-        public MethodListAssociation(Identifier identifier, Identifier type, ParameterList parameterList = null, Expression arrowClauseExpression = null, Block block = null, ModifierList modifierList = null, DocumentationCommentList documentationCommentList = null, DecoratorList attributes = null, MethodList methodList = null)
-            : this(new Method(identifier, type, parameterList, arrowClauseExpression, block, modifierList, documentationCommentList, attributes), methodList)
+        public MethodListAssociation(Identifier identifier, DocumentationComment comment, Block block = null, Identifier type = null, AccessModifiers? accessModifier = null, bool isAsync = false, ParameterList parameterList = null, DecoratorList decoratorList = null, TypeParameterList typeParameterList = null, MethodList methodList = null)
+            : this(new Method(identifier, comment, block, type, accessModifier, isAsync, parameterList, decoratorList, typeParameterList), methodList)
         {
         }
-        public MethodListAssociation(string identifier, string type, ParameterList parameterList = null, Expression arrowClauseExpression = null, Block block = null, ModifierList modifierList = null, DocumentationCommentList documentationCommentList = null, DecoratorList attributes = null, MethodList methodList = null)
-            : this(new Identifier(identifier), new Identifier(type), parameterList, arrowClauseExpression, block, modifierList, documentationCommentList, attributes, methodList)
-        {
-        }
-        public MethodListAssociation(string identifier, string type, string arrowClauseExpression, ParameterList parameterList = null, ModifierList modifierList = null, DocumentationCommentList documentationCommentList = null, DecoratorList attributes = null, MethodList methodList = null)
-            : this(new Identifier(identifier), new Identifier(type), parameterList, new Expression(arrowClauseExpression), null, modifierList, documentationCommentList, attributes, methodList)
+        public MethodListAssociation(string identifier, string comment, Block block = null, string type = null, AccessModifiers? accessModifier = null, bool isAsync = false, ParameterList parameterList = null, DecoratorList decoratorList = null, TypeParameterList typeParameterList = null, MethodList methodList = null)
+            : this(new Identifier(identifier), new DocumentationComment(comment), block, string.IsNullOrWhiteSpace(type) ? null : new Identifier(type), accessModifier, isAsync, parameterList, decoratorList, typeParameterList, methodList)
         {
         }
 

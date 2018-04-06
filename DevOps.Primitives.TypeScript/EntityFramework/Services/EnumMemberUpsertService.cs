@@ -1,4 +1,5 @@
 ﻿using Common.EntityFrameworkServices;
+using DevOps.Primitives.Strings;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -10,25 +11,25 @@ namespace DevOps.Primitives.TypeScript.EntityFramework.Services
     public class EnumMemberUpsertService<TDbContext> : UpsertService<TDbContext, EnumMember>
         where TDbContext : TypeScriptDbContext
     {
-        private readonly IUpsertUniqueListService<TDbContext, Decorator, DecoratorList, DecoratorListAssociation> _attributeLists;
-        private readonly IUpsertUniqueListService<TDbContext, DocumentationComment, DocumentationCommentList, DocumentationCommentListAssociation> _documentationComments;
+        private readonly IUpsertService<TDbContext, DocumentationComment> _documentationComments;
         private readonly IUpsertService<TDbContext, Identifier> _identifiers;
+        private readonly IUpsertService<TDbContext, UnicodeStringReference> _strings;
 
-        public EnumMemberUpsertService(ICacheService<EnumMember> cache, TDbContext database, ILogger<UpsertService<TDbContext, EnumMember>> logger, IUpsertUniqueListService<TDbContext, Decorator, DecoratorList, DecoratorListAssociation> attributeLists, IUpsertUniqueListService<TDbContext, DocumentationComment, DocumentationCommentList, DocumentationCommentListAssociation> documentationComments, IUpsertService<TDbContext, Identifier> identifiers)
+        public EnumMemberUpsertService(ICacheService<EnumMember> cache, TDbContext database, ILogger<UpsertService<TDbContext, EnumMember>> logger, IUpsertService<TDbContext, UnicodeStringReference> strings, IUpsertService<TDbContext, DocumentationComment> documentationComments, IUpsertService<TDbContext, Identifier> identifiers)
             : base(cache, database, logger, database.EnumMembers)
         {
-            CacheKey = record => $"{nameof(TypeScript)}.{nameof(EnumMember)}={record.EqualsValue}:{record.IdentifierId}:{record.DocumentationCommentListId}";
-            _attributeLists = attributeLists ?? throw new ArgumentNullException(nameof(attributeLists));
+            CacheKey = record => $"{nameof(TypeScript)}.{nameof(EnumMember)}={record.DocumentationCommentId}:{record.EqualsValueId}:{record.IdentifierId}";
             _documentationComments = documentationComments ?? throw new ArgumentNullException(nameof(documentationComments));
             _identifiers = identifiers ?? throw new ArgumentNullException(nameof(identifiers));
+            _strings = strings ?? throw new ArgumentNullException(nameof(strings));
         }
 
         protected override async Task<EnumMember> AssignUpsertedReferences(EnumMember record)
         {
-            record.AttributeListCollection = await _attributeLists.UpsertAsync(record.AttributeListCollection);
-            record.AttributeListCollectionId = record.AttributeListCollection?.AttributeListCollectionId ?? record.AttributeListCollectionId;
-            record.DocumentationCommentList = await _documentationComments.UpsertAsync(record.DocumentationCommentList);
-            record.DocumentationCommentListId = record.DocumentationCommentList?.DocumentationCommentListId ?? record.DocumentationCommentListId;
+            record.DocumentationComment = await _documentationComments.UpsertAsync(record.DocumentationComment);
+            record.DocumentationCommentId = record.DocumentationComment?.DocumentationCommentId ?? record.DocumentationCommentId;
+            record.EqualsValue = await _strings.UpsertAsync(record.EqualsValue);
+            record.EqualsValueId = record.EqualsValue?.UnicodeStringReferenceId ?? record.EqualsValueId;
             record.Identifier = await _identifiers.UpsertAsync(record.Identifier);
             record.IdentifierId = record.Identifier?.IdentifierId ?? record.IdentifierId;
             return record;
@@ -36,16 +37,15 @@ namespace DevOps.Primitives.TypeScript.EntityFramework.Services
 
         protected override IEnumerable<object> EnumerateReferences(EnumMember record)
         {
-            yield return record.AttributeListCollection;
-            yield return record.DocumentationCommentList;
+            yield return record.DocumentationComment;
+            yield return record.EqualsValue;
             yield return record.Identifier;
         }
 
         protected override Expression<Func<EnumMember, bool>> FindExisting(EnumMember record)
             => existing
-                => ((existing.EqualsValue == null && record.EqualsValue == null) || (existing.EqualsValue == record.EqualsValue))
-                && ((existing.AttributeListCollectionId == null && record.AttributeListCollectionId == null) || (existing.AttributeListCollectionId == record.AttributeListCollectionId))
-                && ((existing.DocumentationCommentListId == null && record.DocumentationCommentListId == null) || (existing.DocumentationCommentListId == record.DocumentationCommentListId))
+                => existing.DocumentationCommentId == record.DocumentationCommentId
+                && ((existing.EqualsValueId == null && record.EqualsValueId == null) || (existing.EqualsValueId == record.EqualsValueId))
                 && existing.IdentifierId == record.IdentifierId;
     }
 }

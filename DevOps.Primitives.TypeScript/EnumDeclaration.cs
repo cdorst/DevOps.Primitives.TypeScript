@@ -1,4 +1,8 @@
-﻿using ProtoBuf;
+﻿using Common.EntityFrameworkServices;
+using ProtoBuf;
+using System.Linq;
+using System.Text;
+using static DevOps.Primitives.TypeScript.StringConstants;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -9,71 +13,53 @@ namespace DevOps.Primitives.TypeScript
         public EnumDeclaration(
             Identifier identifier,
             Namespace @namespace,
-            ModifierList modifierList = null,
-            ImportStatementList ImportStatementList = null,
-            DocumentationCommentList documentationCommentList = null,
-            DecoratorList attributeListCollection = null,
-            TypeParameterList typeParameterList = null,
-            ConstraintClauseList constraintClauseList = null,
-            BaseList baseList = null,
-            ConstructorList constructorList = null,
-            FieldList fieldList = null,
-            MethodList methodList = null,
-            PropertyList propertyList = null,
+            DocumentationComment comment,
+            bool export = true,
+            ImportStatementList importStatementList = null,
             EnumMemberList enumMemberList = null)
             : base(
                   identifier,
                   @namespace,
-                  modifierList,
-                  ImportStatementList,
-                  documentationCommentList,
-                  attributeListCollection,
-                  typeParameterList,
-                  constraintClauseList,
-                  baseList,
-                  constructorList,
-                  fieldList,
-                  methodList,
-                  propertyList)
+                  comment,
+                  export,
+                  importStatementList)
         {
             EnumMemberList = enumMemberList;
         }
         public EnumDeclaration(
             string identifier,
             string @namespace,
-            ModifierList modifierList = null,
-            ImportStatementList ImportStatementList = null,
-            DocumentationCommentList documentationCommentList = null,
-            DecoratorList attributeListCollection = null,
-            TypeParameterList typeParameterList = null,
-            ConstraintClauseList constraintClauseList = null,
-            BaseList baseList = null,
-            ConstructorList constructorList = null,
-            FieldList fieldList = null,
-            MethodList methodList = null,
-            PropertyList propertyList = null,
+            string comment,
+            bool export = true,
+            ImportStatementList importStatementList = null,
             EnumMemberList enumMemberList = null)
             : this(
                   new Identifier(identifier),
                   new Namespace(@namespace),
-                  modifierList,
-                  ImportStatementList,
-                  documentationCommentList,
-                  attributeListCollection,
-                  typeParameterList,
-                  constraintClauseList,
-                  baseList,
-                  constructorList,
-                  fieldList,
-                  methodList,
-                  propertyList,
+                  new DocumentationComment(comment),
+                  export,
+                  importStatementList,
                   enumMemberList)
         {
         }
 
-        [ProtoMember(28)]
+        [ProtoMember(23)]
         public EnumMemberList EnumMemberList { get; set; }
-        [ProtoMember(29)]
+        [ProtoMember(24)]
         public int EnumMemberListId { get; set; }
+
+        protected override string GetTypeDeclaration()
+        {
+            var export = Export ? "export " : string.Empty;
+            var stringBuilder = new StringBuilder()
+                .Append(DocumentationComment.ToSelfClosingJsDoc())
+                .AppendLine($"{export}enum {Identifier} {{");
+            // Add enum members
+            var members = EnumMemberList.GetRecords().Select(member => member.GetEnumMemberSyntax());
+            foreach (var member in members)
+                foreach (var line in member.SplitLines())
+                    stringBuilder.AppendIndentedLine(line);
+            return stringBuilder.AppendLine(CloseCurlyBrace).ToString();
+        }
     }
 }

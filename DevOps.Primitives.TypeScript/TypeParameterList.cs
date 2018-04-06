@@ -5,6 +5,8 @@ using ProtoBuf;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using static DevOps.Primitives.TypeScript.StringConstants;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -51,5 +53,8 @@ namespace DevOps.Primitives.TypeScript
             ListIdentifier = new AsciiStringReference(
                 UniqueListIdentifierFactory<TypeParameter>.Create(records, r => r.TypeParameterId));
         }
+
+        public string GetTypeParameterListSyntax()
+            => $"<{string.Join(CommaSpace, this.GetRecords().Select(arg => arg.GetTypeParameterSyntax()))}>";
     }
 }

@@ -28,7 +28,7 @@ namespace DevOps.Primitives.TypeScript
             var stringBuilder = new StringBuilder().Append($"namespace {Identifier} {{");
             if (!string.IsNullOrWhiteSpace(declarations))
                 foreach (var line in declarations.SplitLines())
-                    stringBuilder.AppendLine($"{Indent}{line}");
+                    stringBuilder.AppendIndentedLine(line);
             return stringBuilder.AppendLine(CloseCurlyBrace).ToString();
         }
     }

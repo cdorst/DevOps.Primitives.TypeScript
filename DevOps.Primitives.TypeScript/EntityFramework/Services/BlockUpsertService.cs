@@ -32,6 +32,6 @@ namespace DevOps.Primitives.TypeScript.EntityFramework.Services
         }
 
         protected override Expression<Func<Block, bool>> FindExisting(Block record)
-            => existing => existing.StatementListId == record.StatementListId;
+            => existing => ((existing.StatementListId == null && record.StatementListId == null) || (existing.StatementListId == record.StatementListId));
     }
 }

@@ -53,14 +53,14 @@ namespace DevOps.Primitives.TypeScript
         [ProtoMember(6)]
         public int? DecoratorListId { get; set; }
 
-        [ProtoMember(9)]
+        [ProtoMember(7)]
         public Identifier Identifier { get; set; }
-        [ProtoMember(10)]
+        [ProtoMember(8)]
         public int IdentifierId { get; set; }
 
-        [ProtoMember(11)]
+        [ProtoMember(9)]
         public ParameterList ParameterList { get; set; }
-        [ProtoMember(12)]
+        [ProtoMember(10)]
         public int? ParameterListId { get; set; }
 
         public string GetConstructorSyntax(string typeName)

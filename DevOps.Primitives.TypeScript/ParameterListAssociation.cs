@@ -15,12 +15,12 @@ namespace DevOps.Primitives.TypeScript
             Parameter = parameter;
             ParameterList = parameterList;
         }
-        public ParameterListAssociation(Identifier identifier, Identifier type, Expression defaultValue = null, ParameterList parameterList = null)
-            : this (new Parameter(identifier, type, defaultValue), parameterList)
+        public ParameterListAssociation(Identifier identifier, Identifier type, DocumentationComment comment, Expression defaultValue = null, DecoratorList decoratorList = null, ParameterList parameterList = null)
+            : this (new Parameter(identifier, type, comment, defaultValue, decoratorList), parameterList)
         {
         }
-        public ParameterListAssociation(string identifier, string type, Expression defaultValue = null, ParameterList parameterList = null)
-            : this(new Identifier(identifier), new Identifier(type), defaultValue, parameterList)
+        public ParameterListAssociation(string identifier, string type, string comment, Expression defaultValue = null, DecoratorList decoratorList = null, ParameterList parameterList = null)
+            : this(new Identifier(identifier), new Identifier(type), new DocumentationComment(comment), defaultValue, decoratorList, parameterList)
         {
         }
 

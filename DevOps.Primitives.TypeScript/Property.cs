@@ -85,12 +85,12 @@ namespace DevOps.Primitives.TypeScript
 
         public string GetPropertySyntax()
         {
-            var stringBuilder = new StringBuilder().Append($"/** {DocumentationComment} */");
+            var stringBuilder = new StringBuilder().Append(DocumentationComment.ToSelfClosingJsDoc());
             var decorators = DecoratorList?.GetRecords().Select(decorator => decorator.GetDecoratorSyntax());
             foreach (var decorator in decorators ?? new string[] { })
                 stringBuilder.AppendLine(decorator);
             return stringBuilder
-                .AppendLine($"{GetModifiers()}{Identifier}: {Type}{DefaultValue?.GetDefaultValueAssignmentSyntax()}")
+                .AppendLine($"{GetModifiers()}{Identifier}: {Type}{DefaultValue?.GetDefaultValueAssignmentSyntax()};")
                 .ToString();
         }
 

@@ -1,7 +1,9 @@
 ﻿using Common.EntityFrameworkServices;
+using DevOps.Primitives.Strings;
 using ProtoBuf;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static DevOps.Primitives.TypeScript.StringConstants;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -10,15 +12,14 @@ namespace DevOps.Primitives.TypeScript
     public class EnumMember : IUniqueListRecord
     {
         public EnumMember() { }
-        public EnumMember(Identifier identifier, DocumentationCommentList documentationCommentList = null, DecoratorList attributeListCollection = null, int? equalsValue = null)
+        public EnumMember(Identifier identifier, DocumentationComment comment, UnicodeStringReference equalsValue = null)
         {
             Identifier = identifier;
-            DocumentationCommentList = documentationCommentList;
-            AttributeListCollection = attributeListCollection;
+            DocumentationComment = comment;
             EqualsValue = equalsValue;
         }
-        public EnumMember(string identifier, DocumentationCommentList documentationCommentList = null, DecoratorList attributeListCollection = null, int? equalsValue = null)
-            : this(new Identifier(identifier), documentationCommentList, attributeListCollection, equalsValue)
+        public EnumMember(string identifier, string comment, string equalsValue = null)
+            : this(new Identifier(identifier), new DocumentationComment(comment), new UnicodeStringReference(equalsValue))
         {
         }
 
@@ -27,21 +28,24 @@ namespace DevOps.Primitives.TypeScript
         public int EnumMemberId { get; set; }
 
         [ProtoMember(2)]
-        public int? EqualsValue { get; set; }
-
+        public DocumentationComment DocumentationComment { get; set; }
         [ProtoMember(3)]
-        public Identifier Identifier { get; set; }
+        public int DocumentationCommentId { get; set; }
+
         [ProtoMember(4)]
+        public UnicodeStringReference EqualsValue { get; set; }
+        [ProtoMember(5)]
+        public int? EqualsValueId { get; set; }
+
+        [ProtoMember(6)]
+        public Identifier Identifier { get; set; }
+        [ProtoMember(7)]
         public int IdentifierId { get; set; }
 
-        [ProtoMember(5)]
-        public DocumentationCommentList DocumentationCommentList { get; set; }
-        [ProtoMember(6)]
-        public int? DocumentationCommentListId { get; set; }
-
-        [ProtoMember(7)]
-        public DecoratorList AttributeListCollection { get; set; }
-        [ProtoMember(8)]
-        public int? AttributeListCollectionId { get; set; }
+        public string GetEnumMemberSyntax()
+        {
+            var assignment = EqualsValue == null ? string.Empty : $" = {EqualsValue.Value}";
+            return $"{DocumentationComment.ToSelfClosingJsDoc()}{NewLine}{Identifier}{assignment}";
+        }
     }
 }
