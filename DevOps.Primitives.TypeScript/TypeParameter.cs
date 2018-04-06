@@ -10,8 +10,15 @@ namespace DevOps.Primitives.TypeScript
     public class TypeParameter : IUniqueListRecord
     {
         public TypeParameter() { }
-        public TypeParameter(Identifier identifier) { Identifier = identifier; }
-        public TypeParameter(string identifier) : this(new Identifier(identifier)) { }
+        public TypeParameter(Identifier identifier, Identifier extendsConstraint = null)
+        {
+            Identifier = identifier;
+            ExtendsConstraint = extendsConstraint;
+        }
+        public TypeParameter(string identifier, string extendsConstraint = null)
+            : this(new Identifier(identifier), new Identifier(extendsConstraint))
+        {
+        }
 
         [Key]
         [ProtoMember(1)]
@@ -22,7 +29,14 @@ namespace DevOps.Primitives.TypeScript
         [ProtoMember(3)]
         public int IdentifierId { get; set; }
 
+        [ProtoMember(4)]
+        public Identifier ExtendsConstraint { get; set; }
+        [ProtoMember(5)]
+        public int? ExtendsConstraintId { get; set; }
+
         public string GetTypeParameterSyntax()
-            => Identifier.ToString();
+            => ExtendsConstraint == null
+                ? Identifier.ToString()
+                : $"{Identifier} extends {ExtendsConstraint}";
     }
 }
