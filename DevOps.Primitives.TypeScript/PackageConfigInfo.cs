@@ -36,6 +36,7 @@ namespace DevOps.Primitives.TypeScript
         public IEnumerable<string> Cpu { get; set; }
         public bool Private { get; set; }
         public IDictionary<string, string> PublishConfig { get; set; }
+        public IDictionary<string, bool> Browser { get; set; }
 
         public StringBuilder GetJsonStringBuilder(
             ZeroPropertyBehavior zeroPropertyBehavior = ZeroPropertyBehavior.ReturnNull,
@@ -72,6 +73,7 @@ namespace DevOps.Primitives.TypeScript
             if (Any(Os))                    yield return Json(nameof(Os), Os);
             if (Private)                    yield return Json(nameof(Private), Private);
             if (Any(PublishConfig))         yield return Json(nameof(PublishConfig), PublishConfig);
+            if (Any(Browser))               yield return Json(nameof(Browser), Browser);
         }
     }
 }

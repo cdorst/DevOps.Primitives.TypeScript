@@ -104,6 +104,20 @@ namespace DevOps.Primitives.TypeScript
             return stringBuilder.AppendLine(indent, CloseCurlyBrace);
         }
 
+        public static StringBuilder GetObjectProperty(string name, IEnumerable<KeyValuePair<string, bool>> members, byte indent = byte.MinValue, bool formatNameAsCamelCase = true, StringBuilder stringBuilder = null)
+        {
+            if (stringBuilder == null) stringBuilder = new StringBuilder();
+            stringBuilder.AppendProperty(name, formatNameAsCamelCase).Append(OpenCurlyBrace);
+            var count = members.Count();
+            for (int i = Zero; i < count; i++)
+            {
+                var entry = members.ElementAt(i);
+                stringBuilder.AppendBoolProperty(entry.Key, value: entry.Value, indent: NextIndent(indent), appendComma: false);
+                if (NeedsComma(count, i)) stringBuilder.Append(Comma);
+            }
+            return stringBuilder.AppendLine(indent, CloseCurlyBrace);
+        }
+
         public static StringBuilder GetObjectProperty(string name, IEnumerable<KeyValuePair<string, string>> members, byte indent = byte.MinValue, bool formatNameAsCamelCase = true, StringBuilder stringBuilder = null)
         {
             if (stringBuilder == null) stringBuilder = new StringBuilder();
@@ -139,6 +153,9 @@ namespace DevOps.Primitives.TypeScript
             => JsonObject(name, @object, formatNameAsCamelCase);
 
         public static Func<StringBuilder, byte, StringBuilder> Json(string name, IEnumerable<KeyValuePair<string, IEnumerable<string>>> members, bool formatNameAsCamelCase = true)
+            => JsonObject(name, members, formatNameAsCamelCase);
+
+        public static Func<StringBuilder, byte, StringBuilder> Json(string name, IEnumerable<KeyValuePair<string, bool>> members, bool formatNameAsCamelCase = true)
             => JsonObject(name, members, formatNameAsCamelCase);
 
         public static Func<StringBuilder, byte, StringBuilder> Json(string name, IEnumerable<KeyValuePair<string, string>> members, bool formatNameAsCamelCase = true)
@@ -189,6 +206,10 @@ namespace DevOps.Primitives.TypeScript
                 => GetObjectProperty(name, @object, indent, formatNameAsCamelCase, stringBuilder);
 
         public static Func<StringBuilder, byte, StringBuilder> JsonObject(string name, IEnumerable<KeyValuePair<string, IEnumerable<string>>> members, bool formatNameAsCamelCase = true)
+            => (stringBuilder, indent)
+                => GetObjectProperty(name, members, indent, formatNameAsCamelCase, stringBuilder);
+
+        public static Func<StringBuilder, byte, StringBuilder> JsonObject(string name, IEnumerable<KeyValuePair<string, bool>> members, bool formatNameAsCamelCase = true)
             => (stringBuilder, indent)
                 => GetObjectProperty(name, members, indent, formatNameAsCamelCase, stringBuilder);
 
