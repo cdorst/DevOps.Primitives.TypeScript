@@ -1,6 +1,6 @@
 ﻿namespace DevOps.Primitives.TypeScript
 {
-    internal static class StringConstants
+    public static class StringConstants
     {
         public const string BoolFalse = "false";
         public const string BoolTrue = "true";
