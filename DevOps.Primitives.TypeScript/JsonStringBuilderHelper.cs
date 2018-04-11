@@ -8,7 +8,7 @@ using When = Common.Functions.CheckNullableEnumerationForAnyElements.NullableEnu
 
 namespace DevOps.Primitives.TypeScript
 {
-    internal static class JsonStringBuilderHelper
+    public static class JsonStringBuilderHelper
     {
         public const byte IndentOne = One;
         public const byte IndentTwo = 2;
