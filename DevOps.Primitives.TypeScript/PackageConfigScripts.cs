@@ -59,6 +59,24 @@ namespace DevOps.Primitives.TypeScript
         [EnumStringValue(nameof(shrinkwrap))]
         shrinkwrap,
         [EnumStringValue(nameof(postshrinkwrap))]
-        postshrinkwrap
+        postshrinkwrap,
+        [EnumStringValue(nameof(build))]
+        build,
+        [EnumStringValue("build:compiler")]
+        build_compiler,
+        [EnumStringValue("build:tests")]
+        build_tests,
+        [EnumStringValue(nameof(start))]
+        start,
+        [EnumStringValue(nameof(clean))]
+        clean,
+        [EnumStringValue(nameof(gulp))]
+        gulp,
+        [EnumStringValue(nameof(jake))]
+        jake,
+        [EnumStringValue(nameof(lint))]
+        lint,
+        [EnumStringValue("setup-hooks")]
+        setup_hooks
     }
 }
