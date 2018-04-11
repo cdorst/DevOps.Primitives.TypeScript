@@ -11,7 +11,9 @@
         public const string ColonSpace = ": ";
         public const string Comma = ",";
         public const string CommaSpace = ", ";
+        public const string EmptyArray = "[ ]";
         public const string EmptyObject = "{ }";
+        public const string EmptyString = "";
         public const string Indent = "    ";
         public const string NewLine = "\r\n";
         public const string Null = "null";
