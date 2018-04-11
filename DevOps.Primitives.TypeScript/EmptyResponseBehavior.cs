@@ -7,7 +7,6 @@ namespace DevOps.Primitives.TypeScript
     [Flags]
     public enum EmptyResponseBehavior : byte
     {
-        None,
         ExcludeEmptyProperties  = _0,
         ReturnEmptyArray        = _1,
         ReturnEmptyObject       = _2,
