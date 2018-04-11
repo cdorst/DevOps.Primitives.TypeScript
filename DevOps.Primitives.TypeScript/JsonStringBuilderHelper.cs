@@ -23,17 +23,29 @@ namespace DevOps.Primitives.TypeScript
             string name, IEnumerable<string> items, byte indent = IndentOne, bool appendComma = true, bool formatNameAsCamelCase = true)
             => GetArrayProperty(name, items, indent, formatNameAsCamelCase, stringBuilder.AppendIndentedLine(indent, appendComma));
 
-        public static StringBuilder AppendObjectProperty(this StringBuilder stringBuilder,
-            string name, IDictionary<string, IEnumerable<string>> members, byte indent = IndentOne, bool appendComma = true, bool formatNameAsCamelCase = true)
-            => GetObjectProperty(name, members, indent, formatNameAsCamelCase, stringBuilder.AppendIndentedLine(indent, appendComma));
-
         public static StringBuilder AppendBoolProperty(this StringBuilder stringBuilder,
             string name, byte indent = IndentOne, bool value = true, bool appendComma = true, bool formatNameAsCamelCase = true)
             => GetBooleanProperty(name, value, formatNameAsCamelCase, stringBuilder.AppendIndentedLine(indent, appendComma));
 
+        public static StringBuilder AppendObjectProperty(this StringBuilder stringBuilder,
+            string name, IDictionary<string, IEnumerable<string>> members, byte indent = IndentOne, bool appendComma = true, bool formatNameAsCamelCase = true)
+            => GetObjectProperty(name, members, indent, formatNameAsCamelCase, stringBuilder.AppendIndentedLine(indent, appendComma));
+
+        public static StringBuilder AppendProperty(this StringBuilder stringBuilder, string name, bool formatNameAsCamelCase = true)
+            => Property(name, formatNameAsCamelCase, stringBuilder);
+
+        public static StringBuilder AppendPropertyAssignment(this StringBuilder stringBuilder, string name, bool formatNameAsCamelCase, string valueLiteral)
+            => PropertyAssignment(name, formatNameAsCamelCase, valueLiteral, stringBuilder);
+
+        public static StringBuilder AppendPropertyAssignment(this StringBuilder stringBuilder, string name, bool formatNameAsCamelCase, StringBuilder valueLiteral)
+            => PropertyAssignment(name, formatNameAsCamelCase, valueLiteral, stringBuilder);
+
         public static StringBuilder AppendStringProperty(this StringBuilder stringBuilder,
             string name, string text, byte indent = IndentOne, bool appendComma = true, bool formatNameAsCamelCase = true)
             => GetStringProperty(name, text, formatNameAsCamelCase, stringBuilder.AppendIndentedLine(indent, appendComma));
+
+        public static StringBuilder AppendWrapQuotes(this StringBuilder stringBuilder, string text)
+            => WrapQoutes(text, stringBuilder);
 
         public static StringBuilder ConditionallyAppendArray(this StringBuilder stringBuilder, string name, IEnumerable<string> items, byte indent = IndentOne)
             => When.Any(items)
@@ -54,6 +66,9 @@ namespace DevOps.Primitives.TypeScript
             => string.IsNullOrEmpty(text) || text == Null
                 ? stringBuilder
                 : stringBuilder.AppendStringProperty(name, text, indent);
+
+        public static Func<KeyValuePair<T, string>, KeyValuePair<string, string>> EnumKeyedDictionary<T>()
+            => dict => new KeyValuePair<string, string>((dict.Key as Enum).GetStringValue(), dict.Value);
 
         public static StringBuilder GetArrayProperty(string name, IEnumerable<IJsonSerializable> items, byte indent = IndentOne, bool formatNameAsCamelCase = true, StringBuilder stringBuilder = null)
         {
@@ -225,20 +240,20 @@ namespace DevOps.Primitives.TypeScript
             => (stringBuilder, indent)
                 => GetStringProperty(name, text, formatNameAsCamelCase, stringBuilder);
 
-        public static StringBuilder AppendProperty(this StringBuilder stringBuilder, string name, bool formatNameAsCamelCase = true)
-            => Property(name, formatNameAsCamelCase, stringBuilder);
-
-        public static StringBuilder AppendPropertyAssignment(this StringBuilder stringBuilder, string name, bool formatNameAsCamelCase, string valueLiteral)
-            => PropertyAssignment(name, formatNameAsCamelCase, valueLiteral, stringBuilder);
-
-        public static StringBuilder AppendPropertyAssignment(this StringBuilder stringBuilder, string name, bool formatNameAsCamelCase, StringBuilder valueLiteral)
-            => PropertyAssignment(name, formatNameAsCamelCase, valueLiteral, stringBuilder);
-
-        public static StringBuilder AppendWrapQuotes(this StringBuilder stringBuilder, string text)
-            => WrapQoutes(text, stringBuilder);
+        public static IEnumerable<KeyValuePair<string, string>> MapEnumDictionary<TEnum>(this IEnumerable<KeyValuePair<TEnum, string>> dictionary)
+            => dictionary.Select(EnumKeyedDictionary<TEnum>());
 
         public static bool NeedsComma(int count, int i)
             => count > One && i < count - One;
+
+        public static byte NextIndent(byte indent)
+            => (byte)(indent + One);
+
+        public static bool NotNull(object instance)
+            => instance != null;
+
+        public static bool NotNull(string instance)
+            => !string.IsNullOrEmpty(instance);
 
         public static StringBuilder Property(string name, bool formatNameAsCamelCase, StringBuilder stringBuilder = null)
             => (stringBuilder ?? new StringBuilder())
@@ -255,28 +270,13 @@ namespace DevOps.Primitives.TypeScript
                 .AppendProperty(name, formatNameAsCamelCase)
                 .Append(valueLiteral);
 
-        public static bool NotNull(object instance)
-            => instance != null;
-
-        public static bool NotNull(string instance)
-            => !string.IsNullOrEmpty(instance);
-
         public static StringBuilder WrapQoutes(string text, StringBuilder stringBuilder = null)
             => (stringBuilder ?? new StringBuilder())
                 .Append(Quote)
                 .Append(text)
                 .Append(Quote);
 
-        public static Func<KeyValuePair<T, string>, KeyValuePair<string, string>> EnumKeyedDictionary<T>()
-            => dict => new KeyValuePair<string, string>((dict.Key as Enum).GetStringValue(), dict.Value);
-
-        public static IEnumerable<KeyValuePair<string, string>> MapEnumDictionary<TEnum>(this IEnumerable<KeyValuePair<TEnum, string>> dictionary)
-            => dictionary.Select(EnumKeyedDictionary<TEnum>());
-
         private static string BoolString(bool value)
             => value ? BoolTrue : BoolFalse;
-
-        private static byte NextIndent(byte indent)
-            => (byte)(indent + One);
     }
 }
