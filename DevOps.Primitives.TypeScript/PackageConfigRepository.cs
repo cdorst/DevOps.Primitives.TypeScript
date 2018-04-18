@@ -18,7 +18,7 @@ namespace DevOps.Primitives.TypeScript
 
         private IEnumerable<Func<StringBuilder, byte, StringBuilder>> JsonProperties()
         {
-            if (Included(excluType)) yield return JsonString(nameof(Type), Type);
+            if (NotNull(Type)) yield return JsonString(nameof(Type), Type);
             if (NotNull(Url)) yield return JsonString(nameof(Url), Url);
         }
     }

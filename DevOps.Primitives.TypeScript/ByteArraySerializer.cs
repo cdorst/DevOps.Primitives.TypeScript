@@ -34,36 +34,36 @@ namespace DevOps.Primitives.TypeScript
             var hasBytes = byteStart < count - One;
             return (
                 numberOfBools  == Zero ? null : DeserializeBools (bytes.Slice(Zero, numberOfBools).ToArray()),
-                numberOfLongs  == Zero ? null : DeserializeLongs (bytes.Slice(numberOfBools, longLength)),
-                numberOfShorts == Zero ? null : DeserializeShorts(bytes.Slice(shortStart, shortLength)),
-                numberOfInts   == Zero ? null : DeserializeInts  (bytes.Slice(intStart, intLength)),
+                numberOfLongs  == Zero ? null : DeserializeLongs (bytes.Slice(numberOfBools, longLength).ToArray()),
+                numberOfShorts == Zero ? null : DeserializeShorts(bytes.Slice(shortStart, shortLength).ToArray()),
+                numberOfInts   == Zero ? null : DeserializeInts  (bytes.Slice(intStart, intLength).ToArray()),
                 hasBytes ? bytes.Slice(byteStart).ToArray() : null);
         }
 
         public static IEnumerable<bool> DeserializeBools(IEnumerable<byte> bytes)
             => bytes.Select(BytesAsBools);
 
-        public static IEnumerable<long> DeserializeLongs(ReadOnlySpan<byte> bytes)
+        public static IEnumerable<long> DeserializeLongs(byte[] bytes)
         {
             for (int i = 0; i < GetNumberOfResults(bytes.Length, SizeOfLong); i++)
                 yield return BitConverter.ToInt64(
-                    bytes.Slice((i + One) * SizeOfLongMinusOne, SizeOfLong).ToArray(),
+                    bytes.Skip(i * SizeOfLongMinusOne).Take(SizeOfLong).ToArray(),
                     Zero);
         }
 
-        public static IEnumerable<int> DeserializeInts(ReadOnlySpan<byte> bytes)
+        public static IEnumerable<int> DeserializeInts(byte[] bytes)
         {
             for (int i = 0; i < GetNumberOfResults(bytes.Length, SizeOfInt); i++)
                 yield return BitConverter.ToInt32(
-                    bytes.Slice((i + One) * SizeOfIntMinusOne, SizeOfInt).ToArray(),
+                    bytes.Skip(i * SizeOfIntMinusOne).Take(SizeOfInt).ToArray(),
                     Zero);
         }
 
-        public static IEnumerable<short> DeserializeShorts(ReadOnlySpan<byte> bytes)
+        public static IEnumerable<short> DeserializeShorts(byte[] bytes)
         {
             for (int i = 0; i < GetNumberOfResults(bytes.Length, SizeOfShort); i++)
                 yield return BitConverter.ToInt16(
-                    bytes.Slice((i + One) * SizeOfShortMinusOne, SizeOfShort).ToArray(),
+                    bytes.Skip(i * SizeOfShortMinusOne).Take(SizeOfShort).ToArray(),
                     Zero);
         }
 

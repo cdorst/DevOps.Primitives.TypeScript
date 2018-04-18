@@ -208,7 +208,7 @@ namespace DevOps.Primitives.TypeScript
                 ? JsonNull(name, formatNameAsCamelCase)
                 : JsonNumber(name, value.Value, formatNameAsCamelCase);
 
-        public static Func<StringBuilder, byte, StringBuilder> Json<TEnum>(string name, TEnum value, bool formatNameAsCamelCase = true)
+        public static Func<StringBuilder, byte, StringBuilder> JsonEnum<TEnum>(string name, TEnum value, bool formatNameAsCamelCase = true)
             where TEnum : struct, IComparable
             => JsonNumber(name, Convert.ToInt64(value), formatNameAsCamelCase);
 
