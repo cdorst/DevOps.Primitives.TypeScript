@@ -6,7 +6,7 @@ namespace DevOps.Primitives.TypeScript
     public interface IJsonSerializable
     {
         StringBuilder GetJsonStringBuilder(
-            ZeroPropertyBehavior zeroPropertyBehavior = ZeroPropertyBehavior.ReturnNull,
+            EmptyResponseBehavior behavior = EmptyResponseBehavior.Default,
             byte indent = IndentZero,
             StringBuilder stringBuilder = null);
     }

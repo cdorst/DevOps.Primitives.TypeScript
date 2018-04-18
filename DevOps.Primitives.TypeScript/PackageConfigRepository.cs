@@ -11,14 +11,14 @@ namespace DevOps.Primitives.TypeScript
         public string Url { get; set; }
 
         public StringBuilder GetJsonStringBuilder(
-            ZeroPropertyBehavior zeroPropertyBehavior = ZeroPropertyBehavior.ReturnNull,
+            EmptyResponseBehavior emptyResponseBehavior = EmptyResponseBehavior.Default,
             byte indent = IndentZero,
             StringBuilder stringBuilder = null)
-            => JsonObject(JsonProperties(), zeroPropertyBehavior, indent, stringBuilder);
+            => JsonObject(JsonProperties(), emptyResponseBehavior, indent, stringBuilder);
 
         private IEnumerable<Func<StringBuilder, byte, StringBuilder>> JsonProperties()
         {
-            if (NotNull(Type)) yield return JsonString(nameof(Type), Type);
+            if (Included(excluType)) yield return JsonString(nameof(Type), Type);
             if (NotNull(Url)) yield return JsonString(nameof(Url), Url);
         }
     }

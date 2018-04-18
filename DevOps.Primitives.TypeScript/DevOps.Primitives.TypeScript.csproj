@@ -6,7 +6,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>CDorst.DevOps.Primitives.TypeScript</PackageId>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.0.0</Version>
+    <Version>2.1.0</Version>
 
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
@@ -15,6 +15,7 @@
     <PackageReference Include="CDorst.Common.EnumStringValues" Version="2.0.0" />
     <PackageReference Include="CDorst.Common.Functions.CheckNullableEnumerationForAnyElements" Version="1.0.0" />
     <PackageReference Include="CDorst.DevOps.Primitives.Strings" Version="2.0.1" />
+    <PackageReference Include="System.Memory" Version="4.5.0-preview2-26406-04" />
   </ItemGroup>
 
 </Project>

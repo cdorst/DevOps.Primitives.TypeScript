@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using static DevOps.Primitives.TypeScript.StringConstants;
+using Behavior = DevOps.Primitives.TypeScript.EmptyResponseBehavior;
 using When = Common.Functions.CheckNullableEnumerationForAnyElements.NullableEnumerationAny;
 
 namespace DevOps.Primitives.TypeScript
@@ -26,6 +27,12 @@ namespace DevOps.Primitives.TypeScript
         public static StringBuilder AppendBoolProperty(this StringBuilder stringBuilder,
             string name, byte indent = IndentOne, bool value = true, bool appendComma = true, bool formatNameAsCamelCase = true)
             => GetBooleanProperty(name, value, formatNameAsCamelCase, stringBuilder.AppendIndentedLine(indent, appendComma));
+
+        public static StringBuilder AppendEmptyResponse(this StringBuilder stringBuilder, Behavior behavior)
+            => behavior.HasFlag(Behavior.ReturnEmptyArray) ? stringBuilder.Append(EmptyArray)
+            : behavior.HasFlag(Behavior.ReturnEmptyObject) ? stringBuilder.Append(EmptyObject)
+            : behavior.HasFlag(Behavior.ReturnEmptyString) ? stringBuilder.Append(EmptyString)
+            : stringBuilder.Append(Null);
 
         public static StringBuilder AppendObjectProperty(this StringBuilder stringBuilder,
             string name, IDictionary<string, IEnumerable<string>> members, byte indent = IndentOne, bool appendComma = true, bool formatNameAsCamelCase = true)
@@ -100,6 +107,21 @@ namespace DevOps.Primitives.TypeScript
         public static StringBuilder GetBooleanProperty(string name, bool value = true, bool formatNameAsCamelCase = true, StringBuilder stringBuilder = null)
             => PropertyAssignment(name, formatNameAsCamelCase, BoolString(value), stringBuilder);
 
+        public static StringBuilder GetNumberProperty(string name, long value, bool formatNameAsCamelCase = true, StringBuilder stringBuilder = null)
+            => PropertyAssignment(name, formatNameAsCamelCase, value.ToString(), stringBuilder);
+
+        public static StringBuilder GetNumberProperty(string name, int value, bool formatNameAsCamelCase = true, StringBuilder stringBuilder = null)
+            => PropertyAssignment(name, formatNameAsCamelCase, value.ToString(), stringBuilder);
+
+        public static StringBuilder GetNumberProperty(string name, short value, bool formatNameAsCamelCase = true, StringBuilder stringBuilder = null)
+            => PropertyAssignment(name, formatNameAsCamelCase, value.ToString(), stringBuilder);
+
+        public static StringBuilder GetNumberProperty(string name, byte value, bool formatNameAsCamelCase = true, StringBuilder stringBuilder = null)
+            => PropertyAssignment(name, formatNameAsCamelCase, value.ToString(), stringBuilder);
+
+        public static StringBuilder GetNullProperty(string name, bool formatNameAsCamelCase = true, StringBuilder stringBuilder = null)
+            => NullPropertyAssignment(name, formatNameAsCamelCase, stringBuilder);
+
         public static StringBuilder GetObjectProperty(string name, IJsonSerializable @object, byte indent = byte.MinValue, bool formatNameAsCamelCase = true, StringBuilder stringBuilder = null)
             => stringBuilder == null
                 ? @object.GetJsonStringBuilder(indent: indent, stringBuilder: new StringBuilder().AppendProperty(name, formatNameAsCamelCase))
@@ -161,8 +183,34 @@ namespace DevOps.Primitives.TypeScript
         public static Func<StringBuilder, byte, StringBuilder> Json(string name, IEnumerable<IJsonSerializable> items, bool formatNameAsCamelCase = true)
             => JsonArray(name, items, formatNameAsCamelCase);
 
-        public static Func<StringBuilder, byte, StringBuilder> Json(string name, bool value = true, bool formatNameAsCamelCase = true)
-            => JsonBoolean(name, value, formatNameAsCamelCase);
+        public static Func<StringBuilder, byte, StringBuilder> Json(string name, bool? value = true, bool formatNameAsCamelCase = true)
+            => value == null
+                ? JsonNull(name, formatNameAsCamelCase)
+                : JsonBoolean(name, value.Value, formatNameAsCamelCase);
+
+        public static Func<StringBuilder, byte, StringBuilder> Json(string name, long? value, bool formatNameAsCamelCase = true)
+            => value == null
+                ? JsonNull(name, formatNameAsCamelCase)
+                : JsonNumber(name, value.Value, formatNameAsCamelCase);
+
+        public static Func<StringBuilder, byte, StringBuilder> Json(string name, int? value, bool formatNameAsCamelCase = true)
+            => value == null
+                ? JsonNull(name, formatNameAsCamelCase)
+                : JsonNumber(name, value.Value, formatNameAsCamelCase);
+
+        public static Func<StringBuilder, byte, StringBuilder> Json(string name, short? value, bool formatNameAsCamelCase = true)
+            => value == null
+                ? JsonNull(name, formatNameAsCamelCase)
+                : JsonNumber(name, value.Value, formatNameAsCamelCase);
+
+        public static Func<StringBuilder, byte, StringBuilder> Json(string name, byte? value, bool formatNameAsCamelCase = true)
+            => value == null
+                ? JsonNull(name, formatNameAsCamelCase)
+                : JsonNumber(name, value.Value, formatNameAsCamelCase);
+
+        public static Func<StringBuilder, byte, StringBuilder> Json<TEnum>(string name, TEnum value, bool formatNameAsCamelCase = true)
+            where TEnum : struct, IComparable
+            => JsonNumber(name, Convert.ToInt64(value), formatNameAsCamelCase);
 
         public static Func<StringBuilder, byte, StringBuilder> Json(string name, IJsonSerializable @object, bool formatNameAsCamelCase = true)
             => JsonObject(name, @object, formatNameAsCamelCase);
@@ -194,14 +242,31 @@ namespace DevOps.Primitives.TypeScript
             => (stringBuilder, indent)
                 => GetBooleanProperty(name, value, formatNameAsCamelCase, stringBuilder);
 
-        public static StringBuilder JsonObject(IEnumerable<Func<StringBuilder, byte, StringBuilder>> properties, ZeroPropertyBehavior zeroPropertyBehavior = ZeroPropertyBehavior.ReturnNull, byte indent = IndentZero, StringBuilder stringBuilder = null)
+        public static Func<StringBuilder, byte, StringBuilder> JsonNumber(string name, long value, bool formatNameAsCamelCase = true)
+            => (stringBuilder, indent)
+                => GetNumberProperty(name, value, formatNameAsCamelCase, stringBuilder);
+
+        public static Func<StringBuilder, byte, StringBuilder> JsonNumber(string name, int value, bool formatNameAsCamelCase = true)
+            => (stringBuilder, indent)
+                => GetNumberProperty(name, value, formatNameAsCamelCase, stringBuilder);
+
+        public static Func<StringBuilder, byte, StringBuilder> JsonNumber(string name, short value, bool formatNameAsCamelCase = true)
+            => (stringBuilder, indent)
+                => GetNumberProperty(name, value, formatNameAsCamelCase, stringBuilder);
+
+        public static Func<StringBuilder, byte, StringBuilder> JsonNumber(string name, byte value, bool formatNameAsCamelCase = true)
+            => (stringBuilder, indent)
+                => GetNumberProperty(name, value, formatNameAsCamelCase, stringBuilder);
+
+        public static Func<StringBuilder, byte, StringBuilder> JsonNull(string name, bool formatNameAsCamelCase = true)
+            => (stringBuilder, indent)
+                => GetNullProperty(name, formatNameAsCamelCase, stringBuilder);
+
+        public static StringBuilder JsonObject(IEnumerable<Func<StringBuilder, byte, StringBuilder>> properties, Behavior behavior = Behavior.Default, byte indent = IndentZero, StringBuilder stringBuilder = null)
         {
             if (stringBuilder == null) stringBuilder = new StringBuilder();
             var count = properties.Count();
-            if (count == 0)
-                return zeroPropertyBehavior == ZeroPropertyBehavior.ReturnNull ? stringBuilder.Append(Null)
-                    : zeroPropertyBehavior == ZeroPropertyBehavior.ReturnEmptyObject ? stringBuilder.Append(EmptyObject)
-                    : stringBuilder.Append(string.Empty);
+            if (count == 0) return stringBuilder.AppendEmptyResponse(behavior);
             stringBuilder.Append(OpenCurlyBrace);
             for (int i = 0; i < count; i++)
             {
@@ -254,6 +319,12 @@ namespace DevOps.Primitives.TypeScript
 
         public static bool NotNull(string instance)
             => !string.IsNullOrEmpty(instance);
+
+        public static bool NotZero(long instance)
+            => instance != Zero;
+
+        public static StringBuilder NullPropertyAssignment(string name, bool formatNameAsCamelCase, StringBuilder stringBuilder = null)
+            => PropertyAssignment(name, formatNameAsCamelCase, Null, stringBuilder);
 
         public static StringBuilder Property(string name, bool formatNameAsCamelCase, StringBuilder stringBuilder = null)
             => (stringBuilder ?? new StringBuilder())
