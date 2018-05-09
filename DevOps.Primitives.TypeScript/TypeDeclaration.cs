@@ -125,6 +125,9 @@ namespace DevOps.Primitives.TypeScript
         [ProtoMember(22)]
         public int? TypeParameterListId { get; set; }
 
+        public string GetTypeName()
+            => Identifier.ToString();
+
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();
