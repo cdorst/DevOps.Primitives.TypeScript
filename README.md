@@ -1,6 +1,6 @@
 # DevOps.Primitives.TypeScript
 
-Represents TypeScript-language concepts as C# types
+Represents TypeScript-language concepts as C# entity types
 
 ## Available on NuGet
 
