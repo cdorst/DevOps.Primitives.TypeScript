@@ -343,9 +343,9 @@ namespace DevOps.Primitives.TypeScript
 
         public static StringBuilder WrapQoutes(string text, StringBuilder stringBuilder = null)
             => (stringBuilder ?? new StringBuilder())
-                .Append(Quote)
+                .Append(DoubleQuote)
                 .Append(text)
-                .Append(Quote);
+                .Append(DoubleQuote);
 
         private static string BoolString(bool value)
             => value ? BoolTrue : BoolFalse;

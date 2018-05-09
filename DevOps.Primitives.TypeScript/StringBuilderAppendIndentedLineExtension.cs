@@ -3,7 +3,7 @@ using static DevOps.Primitives.TypeScript.StringConstants;
 
 namespace DevOps.Primitives.TypeScript
 {
-    public static class StringBuilderAppendIndentedLineExtension
+    internal static class StringBuilderAppendIndentedLineExtension
     {
         public static StringBuilder AppendIndentedLine(this StringBuilder stringBuilder, byte indent = 1)
             => stringBuilder

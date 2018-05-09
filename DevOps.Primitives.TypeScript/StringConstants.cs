@@ -11,6 +11,7 @@
         public const string ColonSpace = ": ";
         public const string Comma = ",";
         public const string CommaSpace = ", ";
+        public const string DoubleQuote = "\"";
         public const string EmptyArray = "[ ]";
         public const string EmptyObject = "{ }";
         public const string EmptyString = "";
@@ -21,7 +22,6 @@
         public const string OpenJsDoc = "/**";
         public const string OpenParenthesis = "(";
         public const string OpenSquareBracket = "]";
-        public const string Quote = "\"";
         public const string Space = " ";
     }
 }
