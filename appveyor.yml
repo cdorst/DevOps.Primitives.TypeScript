@@ -1,4 +1,4 @@
-version: 3.1.1-{branch}-{build}
+version: 3.1.2-{branch}-{build}
 image: Visual Studio 2017
 environment:
   AZURE_STORAGE_CONNECTION_STRING:
@@ -6,11 +6,11 @@ environment:
   LOCAL_NUGET_SOURCE_PATH: c:\projects\nuget\cache
 install:
 - ps: >-
-    $source = "https://cdorst-dev.azureedge.net/build/nuget-tools_10.zip"
+    $source = "https://cdorst-dev.azureedge.net/build/nuget-tools_15.zip"
 
-    $toolsZip = "c:\projects\nuget\tools_10.zip"
+    $toolsZip = "c:\projects\nuget\tools_15.zip"
 
-    $toolsPath = "c:\projects\nuget\tools_10"
+    $toolsPath = "c:\projects\nuget\tools_15"
 
     New-Item -ItemType Directory -Force -Path c:\projects\nuget\cache
 
@@ -28,17 +28,17 @@ install:
 
     & cd "$env:APPVEYOR_BUILD_FOLDER"
 
-    & dotnet c:\projects\nuget\tools_10\before.dll CDorst c:\projects\nuget\cache https://cdorst-dev.azureedge.net/nuget
+    & dotnet c:\projects\nuget\tools_15\before.dll CDorst c:\projects\nuget\cache https://cdorst-dev.azureedge.net/nuget
 cache:
 - c:\projects\nuget\cache
-- c:\projects\nuget\tools_10
+- c:\projects\nuget\tools_15
 before_build:
 - cmd: dotnet restore
 build:
   verbosity: minimal
 after_build:
 - ps: >-
-    & dotnet c:\projects\nuget\tools_10\after.dll CDorst nuget c:\projects\nuget\tmp
+    & dotnet c:\projects\nuget\tools_15\after.dll CDorst nuget c:\projects\nuget\tmp
 artifacts:
 - path: '**\*.nupkg'
 deploy:

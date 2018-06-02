@@ -6,7 +6,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>CDorst.DevOps.Primitives.TypeScript</PackageId>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>3.1.1</Version>
+    <Version>3.1.2</Version>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
