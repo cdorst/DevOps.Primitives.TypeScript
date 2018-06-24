@@ -10,17 +10,23 @@ namespace DevOps.Primitives.TypeScript
     public class ArgumentListAssociation : IUniqueListAssociation<Argument>
     {
         public ArgumentListAssociation() { }
-        public ArgumentListAssociation(Argument argument, ArgumentList argumentList = null)
+        public ArgumentListAssociation(
+            in Argument argument,
+            in ArgumentList argumentList = default)
         {
             Argument = argument;
             ArgumentList = argumentList;
         }
-        public ArgumentListAssociation(Identifier argument, ArgumentList argumentList = null)
-            : this(new Argument(argument), argumentList)
+        public ArgumentListAssociation(
+            in Identifier argument,
+            in ArgumentList argumentList = default)
+            : this(new Argument(in argument), in argumentList)
         {
         }
-        public ArgumentListAssociation(string argument, ArgumentList argumentList = null)
-            : this(new Identifier(argument), argumentList)
+        public ArgumentListAssociation(
+            in string argument,
+            in ArgumentList argumentList = default)
+            : this(new Identifier(in argument), in argumentList)
         {
         }
 
@@ -40,10 +46,10 @@ namespace DevOps.Primitives.TypeScript
 
         public Argument GetRecord() => Argument;
 
-        public void SetRecord(Argument record)
+        public void SetRecord(in Argument record)
         {
             Argument = record;
-            ArgumentId = Argument.ArgumentId;
+            ArgumentId = record.ArgumentId;
         }
     }
 }

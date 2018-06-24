@@ -10,35 +10,46 @@ namespace DevOps.Primitives.TypeScript
     public class PropertyListAssociation : IUniqueListAssociation<Property>
     {
         public PropertyListAssociation() { }
-        public PropertyListAssociation(Property property, PropertyList propertyList = null)
+        public PropertyListAssociation(
+            in Property property,
+            in PropertyList propertyList = default)
         {
             Property = property;
             PropertyList = propertyList;
         }
         public PropertyListAssociation(
-            Identifier identifier,
-            Identifier type,
-            DocumentationComment documentationComment,
-            AccessModifiers? accessModifier = null,
-            bool isStatic = false,
-            bool isReadonly = false,
-            DecoratorList decoratorList = null,
-            Expression defaultValue = null,
-            PropertyList propertyList = null)
-            : this(new Property(identifier, type, documentationComment, accessModifier, isStatic, isReadonly, decoratorList, defaultValue), propertyList)
+            in Identifier identifier,
+            in Identifier type,
+            in DocumentationComment documentationComment,
+            in AccessModifiers? accessModifier = default,
+            in bool isStatic = default,
+            in bool isReadonly = default,
+            in DecoratorList decoratorList = default,
+            in Expression defaultValue = default,
+            in PropertyList propertyList = default)
+            : this(new Property(in identifier, in type, in documentationComment, in accessModifier, in isStatic, in isReadonly, in decoratorList, in defaultValue), in propertyList)
         {
         }
         public PropertyListAssociation(
             string identifier,
             string type,
             string comment,
-            AccessModifiers? accessModifier = null,
-            bool isStatic = false,
-            bool isReadonly = false,
-            DecoratorList decoratorList = null,
-            Expression defaultValue = null,
-            PropertyList propertyList = null)
-            : this(new Identifier(identifier), new Identifier(type), new DocumentationComment(comment), accessModifier, isStatic, isReadonly, decoratorList, defaultValue, propertyList)
+            AccessModifiers? accessModifier = default,
+            bool isStatic = default,
+            bool isReadonly = default,
+            DecoratorList decoratorList = default,
+            Expression defaultValue = default,
+            PropertyList propertyList = default)
+            : this(
+                  new Identifier(in identifier),
+                  new Identifier(in type),
+                  new DocumentationComment(in comment),
+                  in accessModifier,
+                  in isStatic,
+                  in isReadonly,
+                  in decoratorList,
+                  in defaultValue,
+                  in propertyList)
         {
         }
 
@@ -58,10 +69,10 @@ namespace DevOps.Primitives.TypeScript
 
         public Property GetRecord() => Property;
 
-        public void SetRecord(Property record)
+        public void SetRecord(in Property record)
         {
             Property = record;
-            PropertyId = Property.PropertyId;
+            PropertyId = record.PropertyId;
         }
     }
 }

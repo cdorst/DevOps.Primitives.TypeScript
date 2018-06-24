@@ -11,8 +11,8 @@ namespace DevOps.Primitives.TypeScript
     public class Statement : IUniqueListRecord
     {
         public Statement() { }
-        public Statement(AsciiMaxStringReference text) { Text = text; }
-        public Statement(string text) : this(new AsciiMaxStringReference(text)) { }
+        public Statement(in AsciiMaxStringReference text) => Text = text;
+        public Statement(in string text) : this(new AsciiMaxStringReference(in text)) { }
 
         [Key]
         [ProtoMember(1)]
@@ -23,7 +23,6 @@ namespace DevOps.Primitives.TypeScript
         [ProtoMember(3)]
         public int TextId { get; set; }
 
-        public override string ToString()
-            => Text.Value;
+        public override string ToString() => Text.Value;
     }
 }

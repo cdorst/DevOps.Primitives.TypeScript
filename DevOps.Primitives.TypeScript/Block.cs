@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using static DevOps.Primitives.TypeScript.StringConstants;
+using static System.String;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -12,7 +13,7 @@ namespace DevOps.Primitives.TypeScript
     public class Block
     {
         public Block() { }
-        public Block(StatementList statementList) { StatementList = statementList; }
+        public Block(in StatementList statementList) => StatementList = statementList;
 
         [Key]
         [ProtoMember(1)]
@@ -27,7 +28,7 @@ namespace DevOps.Primitives.TypeScript
         {
             if (StatementList == null) return "{ }";
             var stringBuilder = new StringBuilder().Append(OpenCurlyBrace);
-            foreach (var statement in StatementList.GetRecords()) stringBuilder.AppendLine($"{Indent}{statement}");
+            foreach (var statement in StatementList.GetRecords()) stringBuilder.AppendLine(Concat(Indent, statement));
             return stringBuilder.AppendLine(CloseCurlyBrace).ToString();
         }
     }

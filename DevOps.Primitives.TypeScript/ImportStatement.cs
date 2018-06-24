@@ -2,6 +2,7 @@
 using ProtoBuf;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static System.String;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -10,12 +11,17 @@ namespace DevOps.Primitives.TypeScript
     public class ImportStatement : IUniqueListRecord
     {
         public ImportStatement() { }
-        public ImportStatement(Identifier exportName, Identifier moduleName)
+        public ImportStatement(
+            in Identifier exportName,
+            in Identifier moduleName)
         {
             ExportName = exportName;
             ModuleName = moduleName;
         }
-        public ImportStatement(string exportName, string moduleName) : this(new Identifier(exportName), new Identifier(moduleName)) { }
+        public ImportStatement(
+            in string exportName,
+            in string moduleName)
+            : this(new Identifier(in exportName), new Identifier(in moduleName)) { }
 
         [Key]
         [ProtoMember(1)]
@@ -32,6 +38,6 @@ namespace DevOps.Primitives.TypeScript
         public int ModuleNameId { get; set; }
 
         public string GetImportStatementSyntax()
-            => $"import {ExportName} from \"{ModuleName}\";";
+            => Concat("import ", ExportName, " from \"", ModuleName, "\";");
     }
 }

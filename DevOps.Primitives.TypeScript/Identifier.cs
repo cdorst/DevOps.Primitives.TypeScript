@@ -10,8 +10,8 @@ namespace DevOps.Primitives.TypeScript
     public class Identifier
     {
         public Identifier() { }
-        public Identifier(AsciiStringReference name) { Name = name; }
-        public Identifier(string name) : this(new AsciiStringReference(name)) { }
+        public Identifier(in AsciiStringReference name) => Name = name;
+        public Identifier(in string name) : this(new AsciiStringReference(in name)) { }
 
         [Key]
         [ProtoMember(1)]

@@ -3,6 +3,7 @@ using ProtoBuf;
 using System.Linq;
 using System.Text;
 using static DevOps.Primitives.TypeScript.StringConstants;
+using static System.String;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -11,38 +12,38 @@ namespace DevOps.Primitives.TypeScript
     {
         public InterfaceDeclaration() { }
         public InterfaceDeclaration(
-            string identifier,
-            string @namespace,
-            string comment,
-            bool export = true,
-            ImportStatementList importStatementList = null,
-            DecoratorList decoratorList = null,
-            TypeParameterList typeParameterList = null,
-            MethodList methodList = null,
-            PropertyList propertyList = null,
-            BaseList extendsList = null)
+            in string identifier,
+            in string @namespace,
+            in string comment,
+            in bool export = true,
+            in ImportStatementList importStatementList = default,
+            in DecoratorList decoratorList = default,
+            in TypeParameterList typeParameterList = default,
+            in MethodList methodList = default,
+            in PropertyList propertyList = default,
+            in BaseList extendsList = default)
             : base(
-                  identifier,
-                  @namespace,
-                  comment,
-                  export,
-                  importStatementList,
-                  decoratorList,
-                  typeParameterList,
+                  in identifier,
+                  in @namespace,
+                  in comment,
+                  in export,
+                  in importStatementList,
+                  in decoratorList,
+                  in typeParameterList,
                   null,
-                  methodList,
-                  propertyList,
-                  extendsList)
+                  in methodList,
+                  in propertyList,
+                  in extendsList)
         {
         }
 
         protected override string GetTypeDeclaration()
         {
-            var export = Export ? "export " : string.Empty;
-            var extends = $" {ExtendsList?.GetBaseListSyntax(BaseListKind.Extends)}".TrimEnd();
+            var export = Export ? "export " : Empty;
+            var extends = Concat(" ", ExtendsList?.GetBaseListSyntax(BaseListKind.Extends) ?? Empty).TrimEnd();
             var stringBuilder = new StringBuilder()
                 .Append(DocumentationComment.ToSelfClosingJsDoc())
-                .AppendLine($"{export}interface {Identifier}{TypeParameterList?.GetTypeParameterListSyntax()}{extends} {{");
+                .AppendLine(Concat(export, "interface ", Identifier.ToString(), TypeParameterList?.GetTypeParameterListSyntax() ?? Empty, extends, " {"));
             // Add properties
             if (PropertyList != null)
             {

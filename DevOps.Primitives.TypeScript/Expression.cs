@@ -2,6 +2,7 @@
 using ProtoBuf;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static System.String;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -10,8 +11,8 @@ namespace DevOps.Primitives.TypeScript
     public class Expression
     {
         public Expression() { }
-        public Expression(AsciiMaxStringReference text) { Text = text; }
-        public Expression(string text) :this(new AsciiMaxStringReference(text)) { }
+        public Expression(in AsciiMaxStringReference text) => Text = text;
+        public Expression(in string text) :this(new AsciiMaxStringReference(in text)) { }
 
         [Key]
         [ProtoMember(1)]
@@ -22,10 +23,8 @@ namespace DevOps.Primitives.TypeScript
         [ProtoMember(3)]
         public int TextId { get; set; }
 
-        public string GetDefaultValueAssignmentSyntax()
-            => $" = {this}";
+        public string GetDefaultValueAssignmentSyntax() => Concat(" = ", ToString());
 
-        public override string ToString()
-            => Text.Value;
+        public override string ToString() => Text.Value;
     }
 }

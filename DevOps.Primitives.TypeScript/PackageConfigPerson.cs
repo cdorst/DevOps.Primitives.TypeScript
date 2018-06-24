@@ -12,9 +12,9 @@ namespace DevOps.Primitives.TypeScript
         public string Url { get; set; }
 
         public StringBuilder GetJsonStringBuilder(
-            EmptyResponseBehavior emptyResponseBehavior = EmptyResponseBehavior.Default,
-            byte indent = IndentZero,
-            StringBuilder stringBuilder = null)
+            in EmptyResponseBehavior emptyResponseBehavior = EmptyResponseBehavior.Default,
+            in byte indent = IndentZero,
+            StringBuilder stringBuilder = default)
             => JsonObject(JsonProperties(), emptyResponseBehavior, indent, stringBuilder);
 
         private IEnumerable<Func<StringBuilder, byte, StringBuilder>> JsonProperties()

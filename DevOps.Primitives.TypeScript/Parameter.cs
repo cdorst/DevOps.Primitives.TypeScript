@@ -2,6 +2,7 @@
 using ProtoBuf;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static System.String;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -10,7 +11,12 @@ namespace DevOps.Primitives.TypeScript
     public class Parameter : IUniqueListRecord
     {
         public Parameter() { }
-        public Parameter(Identifier identifier, Identifier type, DocumentationComment comment, Expression defaultValue = null, DecoratorList decoratorList = null)
+        public Parameter(
+            in Identifier identifier,
+            in Identifier type,
+            in DocumentationComment comment,
+            in Expression defaultValue = default,
+            in DecoratorList decoratorList = default)
         {
             DecoratorList = decoratorList;
             DefaultValue = defaultValue;
@@ -18,8 +24,18 @@ namespace DevOps.Primitives.TypeScript
             Identifier = identifier;
             Type = type;
         }
-        public Parameter(string identifier, string type, string comment, Expression defaultValue = null, DecoratorList decoratorList = null)
-            : this(new Identifier(identifier), new Identifier(type), new DocumentationComment(comment), defaultValue, decoratorList)
+        public Parameter(
+            in string identifier,
+            in string type,
+            in string comment,
+            in Expression defaultValue = default,
+            in DecoratorList decoratorList = default)
+            : this(
+                  new Identifier(in identifier),
+                  new Identifier(in type),
+                  new DocumentationComment(in comment),
+                  in defaultValue,
+                  in decoratorList)
         {
         }
 
@@ -58,10 +74,10 @@ namespace DevOps.Primitives.TypeScript
         public string GetParameterSyntax()
         {
             var decorators = DecoratorList?.GetInlineDecoratorListSyntax();
-            if (!string.IsNullOrEmpty(decorators)) decorators = $"{decorators} ";
-            var modifier = IsReadonly ? "readonly " : string.Empty;
-            var assignment = DefaultValue == null ? string.Empty : $" = {DefaultValue}";
-            return $"{decorators}{modifier}{Identifier}: {Type}{assignment}";
+            if (!IsNullOrEmpty(decorators)) decorators = Concat(decorators, " ");
+            var modifier = IsReadonly ? "readonly " : Empty;
+            var assignment = DefaultValue == null ? Empty : Concat(" = ", DefaultValue);
+            return Concat(decorators, modifier, Identifier.ToString(), ": ", Type, assignment);
         }
     }
 }

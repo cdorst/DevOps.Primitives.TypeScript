@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using static DevOps.Primitives.TypeScript.StringConstants;
+using static System.String;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -16,21 +17,29 @@ namespace DevOps.Primitives.TypeScript
     public class BaseList : IUniqueList<BaseType, BaseListAssociation>
     {
         public BaseList() { }
-        public BaseList(List<BaseListAssociation> baseListAssociations, AsciiStringReference listIdentifier = null)
+        public BaseList(
+            in List<BaseListAssociation> baseListAssociations,
+            in AsciiStringReference listIdentifier = default)
         {
             BaseListAssociations = baseListAssociations;
             ListIdentifier = listIdentifier;
         }
-        public BaseList(BaseListAssociation baseListAssociation, AsciiStringReference listIdentifier = null)
-            : this(new List<BaseListAssociation> { baseListAssociation }, listIdentifier)
+        public BaseList(
+            in BaseListAssociation baseListAssociation,
+            in AsciiStringReference listIdentifier = default)
+            : this(new List<BaseListAssociation> { baseListAssociation }, in listIdentifier)
         {
         }
-        public BaseList(Identifier baseType, AsciiStringReference listIdentifier = null)
-            : this(new BaseListAssociation(baseType), listIdentifier)
+        public BaseList(
+            in Identifier baseType,
+            in AsciiStringReference listIdentifier = default)
+            : this(new BaseListAssociation(in baseType), in listIdentifier)
         {
         }
-        public BaseList(string baseType, AsciiStringReference listIdentifier = null)
-            : this(new Identifier(baseType), listIdentifier)
+        public BaseList(
+            in string baseType,
+            in AsciiStringReference listIdentifier = default)
+            : this(new Identifier(in baseType), in listIdentifier)
         {
         }
 
@@ -48,14 +57,14 @@ namespace DevOps.Primitives.TypeScript
 
         public List<BaseListAssociation> GetAssociations() => BaseListAssociations;
 
-        public void SetRecords(List<BaseType> records)
+        public void SetRecords(in List<BaseType> records)
         {
-            BaseListAssociations = UniqueListAssociationsFactory<BaseType, BaseListAssociation>.Create(records);
+            BaseListAssociations = UniqueListAssociationsFactory<BaseType, BaseListAssociation>.Create(in records);
             ListIdentifier = new AsciiStringReference(
-                UniqueListIdentifierFactory<BaseType>.Create(records, r => r.BaseTypeId));
+                UniqueListIdentifierFactory<BaseType>.Create(in records, r => r.BaseTypeId));
         }
 
-        public string GetBaseListSyntax(BaseListKind listKind)
-            => $"{listKind.GetStringValue()} {string.Join(CommaSpace, this.GetRecords().Select(each => each.GetBaseTypeSyntax()))}";
+        public string GetBaseListSyntax(in BaseListKind listKind)
+            => Concat(listKind.GetStringValue(), " ", Join(CommaSpace, this.GetRecords().Select(each => each.GetBaseTypeSyntax())));
     }
 }

@@ -15,21 +15,29 @@ namespace DevOps.Primitives.TypeScript
     public class DecoratorList : IUniqueList<Decorator, DecoratorListAssociation>
     {
         public DecoratorList() { }
-        public DecoratorList(List<DecoratorListAssociation> associations, AsciiStringReference listIdentifier = null)
+        public DecoratorList(
+            in List<DecoratorListAssociation> associations,
+            in AsciiStringReference listIdentifier = default)
         {
             DecoratorListAssociations = associations;
             ListIdentifier = listIdentifier;
         }
-        public DecoratorList(DecoratorListAssociation attributeList, AsciiStringReference listIdentifier = null)
-            : this(new List<DecoratorListAssociation> { attributeList }, listIdentifier)
+        public DecoratorList(
+            in DecoratorListAssociation attributeList,
+            in AsciiStringReference listIdentifier = default)
+            : this(new List<DecoratorListAssociation> { attributeList }, in listIdentifier)
         {
         }
-        public DecoratorList(Identifier decorator, AsciiStringReference listIdentifier = null)
-            : this(new DecoratorListAssociation(decorator), listIdentifier)
+        public DecoratorList(
+            in Identifier decorator,
+            in AsciiStringReference listIdentifier = default)
+            : this(new DecoratorListAssociation(in decorator), in listIdentifier)
         {
         }
-        public DecoratorList(string decorator, AsciiStringReference listIdentifier = null)
-            : this(new Identifier(decorator), listIdentifier)
+        public DecoratorList(
+            in string decorator,
+            in AsciiStringReference listIdentifier = default)
+            : this(new Identifier(in decorator), in listIdentifier)
         {
         }
 
@@ -47,11 +55,11 @@ namespace DevOps.Primitives.TypeScript
 
         public List<DecoratorListAssociation> GetAssociations() => DecoratorListAssociations;
 
-        public void SetRecords(List<Decorator> records)
+        public void SetRecords(in List<Decorator> records)
         {
-            DecoratorListAssociations = UniqueListAssociationsFactory<Decorator, DecoratorListAssociation>.Create(records);
+            DecoratorListAssociations = UniqueListAssociationsFactory<Decorator, DecoratorListAssociation>.Create(in records);
             ListIdentifier = new AsciiStringReference(
-                UniqueListIdentifierFactory<Decorator>.Create(records, r => r.DecoratorId));
+                UniqueListIdentifierFactory<Decorator>.Create(in records, r => r.DecoratorId));
         }
 
         public string GetInlineDecoratorListSyntax()

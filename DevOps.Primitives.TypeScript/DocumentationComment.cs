@@ -3,6 +3,7 @@ using DevOps.Primitives.Strings;
 using ProtoBuf;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static System.String;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -11,14 +12,8 @@ namespace DevOps.Primitives.TypeScript
     public class DocumentationComment : IUniqueListRecord
     {
         public DocumentationComment() { }
-        public DocumentationComment(AsciiMaxStringReference text)
-        {
-            Text = text;
-        }
-        public DocumentationComment(string text)
-            : this(new AsciiMaxStringReference(text))
-        {
-        }
+        public DocumentationComment(in AsciiMaxStringReference text) => Text = text;
+        public DocumentationComment(in string text) : this(new AsciiMaxStringReference(in text)) { }
 
         [Key]
         [ProtoMember(1)]
@@ -29,8 +24,7 @@ namespace DevOps.Primitives.TypeScript
         [ProtoMember(3)]
         public int TextId { get; set; }
 
-        public string ToSelfClosingJsDoc()
-            => $"/** {this} */";
+        public string ToSelfClosingJsDoc() => Concat("/** ", ToString(), " */");
 
         public override string ToString() => Text.Value;
     }

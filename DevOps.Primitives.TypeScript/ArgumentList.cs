@@ -13,25 +13,35 @@ namespace DevOps.Primitives.TypeScript
     public class ArgumentList : IUniqueList<Argument, ArgumentListAssociation>
     {
         public ArgumentList() { }
-        public ArgumentList(List<ArgumentListAssociation> argumentListAssociations, AsciiStringReference listIdentifier = null)
+        public ArgumentList(
+            in List<ArgumentListAssociation> argumentListAssociations,
+            in AsciiStringReference listIdentifier = default)
         {
             ArgumentListAssociations = argumentListAssociations;
             ListIdentifier = listIdentifier;
         }
-        public ArgumentList(ArgumentListAssociation argumentListAssociation, AsciiStringReference listIdentifier = null)
-            : this(new List<ArgumentListAssociation> { argumentListAssociation }, listIdentifier)
+        public ArgumentList(
+            in ArgumentListAssociation argumentListAssociation,
+            in AsciiStringReference listIdentifier = default)
+            : this(new List<ArgumentListAssociation> { argumentListAssociation }, in listIdentifier)
         {
         }
-        public ArgumentList(Argument argument, AsciiStringReference listIdentifier = null)
-            : this(new ArgumentListAssociation(argument), listIdentifier)
+        public ArgumentList(
+            in Argument argument,
+            in AsciiStringReference listIdentifier = default)
+            : this(new ArgumentListAssociation(in argument), in listIdentifier)
         {
         }
-        public ArgumentList(Identifier argument, AsciiStringReference listIdentifier = null)
-            : this(new Argument(argument), listIdentifier)
+        public ArgumentList(
+            in Identifier argument,
+            in AsciiStringReference listIdentifier = default)
+            : this(new Argument(in argument), in listIdentifier)
         {
         }
-        public ArgumentList(string argument, AsciiStringReference listIdentifier = null)
-            : this(new Identifier(argument), listIdentifier)
+        public ArgumentList(
+            in string argument,
+            in AsciiStringReference listIdentifier = default)
+            : this(new Identifier(in argument), in listIdentifier)
         {
         }
 
@@ -49,11 +59,11 @@ namespace DevOps.Primitives.TypeScript
 
         public List<ArgumentListAssociation> GetAssociations() => ArgumentListAssociations;
 
-        public void SetRecords(List<Argument> records)
+        public void SetRecords(in List<Argument> records)
         {
-            ArgumentListAssociations = UniqueListAssociationsFactory<Argument, ArgumentListAssociation>.Create(records);
+            ArgumentListAssociations = UniqueListAssociationsFactory<Argument, ArgumentListAssociation>.Create(in records);
             ListIdentifier = new AsciiStringReference(
-                UniqueListIdentifierFactory<Argument>.Create(records, r => r.ArgumentId));
+                UniqueListIdentifierFactory<Argument>.Create(in records, r => r.ArgumentId));
         }
     }
 }

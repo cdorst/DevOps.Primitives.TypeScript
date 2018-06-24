@@ -10,17 +10,23 @@ namespace DevOps.Primitives.TypeScript
     public class BaseListAssociation : IUniqueListAssociation<BaseType>
     {
         public BaseListAssociation() { }
-        public BaseListAssociation(BaseType baseType, BaseList baseList = null)
+        public BaseListAssociation(
+            in BaseType baseType,
+            in BaseList baseList = default)
         {
             BaseType = baseType;
             BaseList = baseList;
         }
-        public BaseListAssociation(Identifier baseType, BaseList baseList = null)
-            : this(new BaseType(baseType), baseList)
+        public BaseListAssociation(
+            in Identifier baseType,
+            in BaseList baseList = default)
+            : this(new BaseType(in baseType), in baseList)
         {
         }
-        public BaseListAssociation(string baseType, BaseList baseList = null)
-            : this(new Identifier(baseType), baseList)
+        public BaseListAssociation(
+            in string baseType,
+            in BaseList baseList = default)
+            : this(new Identifier(in baseType), in baseList)
         {
         }
 
@@ -40,10 +46,10 @@ namespace DevOps.Primitives.TypeScript
 
         public BaseType GetRecord() => BaseType;
 
-        public void SetRecord(BaseType record)
+        public void SetRecord(in BaseType record)
         {
             BaseType = record;
-            BaseTypeId = BaseType.BaseTypeId;
+            BaseTypeId = record.BaseTypeId;
         }
     }
 }

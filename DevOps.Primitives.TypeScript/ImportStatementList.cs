@@ -13,13 +13,17 @@ namespace DevOps.Primitives.TypeScript
     public class ImportStatementList : IUniqueList<ImportStatement, ImportStatementListAssociation>
     {
         public ImportStatementList() { }
-        public ImportStatementList(List<ImportStatementListAssociation> importStatementListAssociations, AsciiStringReference listIdentifier = null)
+        public ImportStatementList(
+            in List<ImportStatementListAssociation> importStatementListAssociations,
+            in AsciiStringReference listIdentifier = default)
         {
             ImportStatementListAssociations = importStatementListAssociations;
             ListIdentifier = listIdentifier;
         }
-        public ImportStatementList(ImportStatementListAssociation ImportStatementListAssociation, AsciiStringReference listIdentifier = null)
-            : this(new List<ImportStatementListAssociation> { ImportStatementListAssociation }, listIdentifier)
+        public ImportStatementList(
+            in ImportStatementListAssociation ImportStatementListAssociation,
+            in AsciiStringReference listIdentifier = default)
+            : this(new List<ImportStatementListAssociation> { ImportStatementListAssociation }, in listIdentifier)
         {
         }
 
@@ -37,11 +41,11 @@ namespace DevOps.Primitives.TypeScript
 
         public List<ImportStatementListAssociation> GetAssociations() => ImportStatementListAssociations;
 
-        public void SetRecords(List<ImportStatement> records)
+        public void SetRecords(in List<ImportStatement> records)
         {
-            ImportStatementListAssociations = UniqueListAssociationsFactory<ImportStatement, ImportStatementListAssociation>.Create(records);
+            ImportStatementListAssociations = UniqueListAssociationsFactory<ImportStatement, ImportStatementListAssociation>.Create(in records);
             ListIdentifier = new AsciiStringReference(
-                UniqueListIdentifierFactory<ImportStatement>.Create(records, r => r.ImportStatementId));
+                UniqueListIdentifierFactory<ImportStatement>.Create(in records, r => r.ImportStatementId));
         }
     }
 }

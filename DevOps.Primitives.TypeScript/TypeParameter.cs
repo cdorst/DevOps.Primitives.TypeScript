@@ -2,6 +2,7 @@
 using ProtoBuf;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static System.String;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -10,13 +11,17 @@ namespace DevOps.Primitives.TypeScript
     public class TypeParameter : IUniqueListRecord
     {
         public TypeParameter() { }
-        public TypeParameter(Identifier identifier, Identifier extendsConstraint = null)
+        public TypeParameter(
+            in Identifier identifier,
+            in Identifier extendsConstraint = default)
         {
             Identifier = identifier;
             ExtendsConstraint = extendsConstraint;
         }
-        public TypeParameter(string identifier, string extendsConstraint = null)
-            : this(new Identifier(identifier), new Identifier(extendsConstraint))
+        public TypeParameter(
+            in string identifier,
+            in string extendsConstraint = default)
+            : this(new Identifier(in identifier), new Identifier(in extendsConstraint))
         {
         }
 
@@ -37,6 +42,6 @@ namespace DevOps.Primitives.TypeScript
         public string GetTypeParameterSyntax()
             => ExtendsConstraint == null
                 ? Identifier.ToString()
-                : $"{Identifier} extends {ExtendsConstraint}";
+                : Concat(Identifier.ToString(), " extends ", ExtendsConstraint.ToString());
     }
 }

@@ -4,6 +4,7 @@ using ProtoBuf;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static DevOps.Primitives.TypeScript.StringConstants;
+using static System.String;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -12,14 +13,20 @@ namespace DevOps.Primitives.TypeScript
     public class EnumMember : IUniqueListRecord
     {
         public EnumMember() { }
-        public EnumMember(Identifier identifier, DocumentationComment comment, UnicodeStringReference equalsValue = null)
+        public EnumMember(
+            in Identifier identifier,
+            in DocumentationComment comment,
+            in UnicodeStringReference equalsValue = default)
         {
             Identifier = identifier;
             DocumentationComment = comment;
             EqualsValue = equalsValue;
         }
-        public EnumMember(string identifier, string comment, string equalsValue = null)
-            : this(new Identifier(identifier), new DocumentationComment(comment), new UnicodeStringReference(equalsValue))
+        public EnumMember(
+            in string identifier,
+            in string comment,
+            in string equalsValue = default)
+            : this(new Identifier(in identifier), new DocumentationComment(in comment), new UnicodeStringReference(in equalsValue))
         {
         }
 
@@ -44,8 +51,8 @@ namespace DevOps.Primitives.TypeScript
 
         public string GetEnumMemberSyntax()
         {
-            var assignment = EqualsValue == null ? string.Empty : $" = {EqualsValue.Value}";
-            return $"{DocumentationComment.ToSelfClosingJsDoc()}{NewLine}{Identifier}{assignment}";
+            var assignment = EqualsValue == null ? Empty : Concat(" = ", EqualsValue.Value);
+            return Concat(DocumentationComment.ToSelfClosingJsDoc(), NewLine, Identifier, assignment);
         }
     }
 }

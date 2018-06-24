@@ -10,7 +10,9 @@ namespace DevOps.Primitives.TypeScript
     public class ImportStatementListAssociation : IUniqueListAssociation<ImportStatement>
     {
         public ImportStatementListAssociation() { }
-        public ImportStatementListAssociation(ImportStatement importStatement, ImportStatementList importStatementList = null)
+        public ImportStatementListAssociation(
+            in ImportStatement importStatement,
+            in ImportStatementList importStatementList = default)
         {
             ImportStatement = importStatement;
             ImportStatementList = importStatementList;
@@ -32,10 +34,10 @@ namespace DevOps.Primitives.TypeScript
 
         public ImportStatement GetRecord() => ImportStatement;
 
-        public void SetRecord(ImportStatement record)
+        public void SetRecord(in ImportStatement record)
         {
             ImportStatement = record;
-            ImportStatementId = ImportStatement.ImportStatementId;
+            ImportStatementId = record.ImportStatementId;
         }
     }
 }

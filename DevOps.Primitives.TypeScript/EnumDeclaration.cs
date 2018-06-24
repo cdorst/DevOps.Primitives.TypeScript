@@ -3,6 +3,7 @@ using ProtoBuf;
 using System.Linq;
 using System.Text;
 using static DevOps.Primitives.TypeScript.StringConstants;
+using static System.String;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -11,35 +12,35 @@ namespace DevOps.Primitives.TypeScript
     {
         public EnumDeclaration() { }
         public EnumDeclaration(
-            Identifier identifier,
-            Namespace @namespace,
-            DocumentationComment comment,
-            bool export = true,
-            ImportStatementList importStatementList = null,
-            EnumMemberList enumMemberList = null)
+            in Identifier identifier,
+            in Namespace @namespace,
+            in DocumentationComment comment,
+            in bool export = true,
+            in ImportStatementList importStatementList = default,
+            in EnumMemberList enumMemberList = default)
             : base(
-                  identifier,
-                  @namespace,
-                  comment,
-                  export,
-                  importStatementList)
+                  in identifier,
+                  in @namespace,
+                  in comment,
+                  in export,
+                  in importStatementList)
         {
             EnumMemberList = enumMemberList;
         }
         public EnumDeclaration(
-            string identifier,
-            string @namespace,
-            string comment,
-            bool export = true,
-            ImportStatementList importStatementList = null,
-            EnumMemberList enumMemberList = null)
+            in string identifier,
+            in string @namespace,
+            in string comment,
+            in bool export = true,
+            in ImportStatementList importStatementList = default,
+            in EnumMemberList enumMemberList = default)
             : this(
-                  new Identifier(identifier),
-                  new Namespace(@namespace),
-                  new DocumentationComment(comment),
-                  export,
-                  importStatementList,
-                  enumMemberList)
+                  new Identifier(in identifier),
+                  new Namespace(in @namespace),
+                  new DocumentationComment(in comment),
+                  in export,
+                  in importStatementList,
+                  in enumMemberList)
         {
         }
 
@@ -50,10 +51,10 @@ namespace DevOps.Primitives.TypeScript
 
         protected override string GetTypeDeclaration()
         {
-            var export = Export ? "export " : string.Empty;
+            var export = Export ? "export " : Empty;
             var stringBuilder = new StringBuilder()
                 .Append(DocumentationComment.ToSelfClosingJsDoc())
-                .AppendLine($"{export}enum {Identifier} {{");
+                .AppendLine(Concat(export, "enum ", Identifier.ToString(), " {"));
             // Add enum members
             var members = EnumMemberList.GetRecords().Select(member => member.GetEnumMemberSyntax());
             foreach (var member in members)

@@ -3,6 +3,7 @@ using ProtoBuf;
 using System.Linq;
 using System.Text;
 using static DevOps.Primitives.TypeScript.StringConstants;
+using static System.String;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -11,63 +12,63 @@ namespace DevOps.Primitives.TypeScript
     {
         public ClassDeclaration() { }
         public ClassDeclaration(
-            Identifier identifier,
-            Namespace @namespace,
-            DocumentationComment comment,
-            bool export = true,
-            ImportStatementList importStatementList = null,
-            DecoratorList decoratorList = null,
-            TypeParameterList typeParameterList = null,
-            Constructor constructor = null,
-            MethodList methodList = null,
-            PropertyList propertyList = null,
-            BaseList extendsList = null,
-            BaseList implementsList = null,
-            bool isAbstract = false)
+            in Identifier identifier,
+            in Namespace @namespace,
+            in DocumentationComment comment,
+            in bool export = true,
+            in ImportStatementList importStatementList = default,
+            in DecoratorList decoratorList = default,
+            in TypeParameterList typeParameterList = default,
+            in Constructor constructor = default,
+            in MethodList methodList = default,
+            in PropertyList propertyList = default,
+            in BaseList extendsList = default,
+            in BaseList implementsList = default,
+            in bool isAbstract = default)
             : base(
-                  identifier,
-                  @namespace,
-                  comment,
-                  export,
-                  importStatementList,
-                  decoratorList,
-                  typeParameterList,
-                  constructor,
-                  methodList,
-                  propertyList,
-                  extendsList)
+                  in identifier,
+                  in @namespace,
+                  in comment,
+                  in export,
+                  in importStatementList,
+                  in decoratorList,
+                  in typeParameterList,
+                  in constructor,
+                  in methodList,
+                  in propertyList,
+                  in extendsList)
         {
             ImplementsList = implementsList;
             IsAbstract = isAbstract;
         }
         public ClassDeclaration(
-            string identifier,
-            string @namespace,
-            string comment,
-            bool export = true,
-            ImportStatementList importStatementList = null,
-            DecoratorList decoratorList = null,
-            TypeParameterList typeParameterList = null,
-            Constructor constructor = null,
-            MethodList methodList = null,
-            PropertyList propertyList = null,
-            BaseList extendsList = null,
-            BaseList implementsList = null,
-            bool isAbstract = false)
+            in string identifier,
+            in string @namespace,
+            in string comment,
+            in bool export = true,
+            in ImportStatementList importStatementList = default,
+            in DecoratorList decoratorList = default,
+            in TypeParameterList typeParameterList = default,
+            in Constructor constructor = default,
+            in MethodList methodList = default,
+            in PropertyList propertyList = default,
+            in BaseList extendsList = default,
+            in BaseList implementsList = default,
+            in bool isAbstract = default)
             : this(
-                  new Identifier(identifier),
-                  new Namespace(@namespace),
-                  new DocumentationComment(comment),
-                  export,
-                  importStatementList,
-                  decoratorList,
-                  typeParameterList,
-                  constructor,
-                  methodList,
-                  propertyList,
-                  extendsList,
-                  implementsList,
-                  isAbstract)
+                  new Identifier(in identifier),
+                  new Namespace(in @namespace),
+                  new DocumentationComment(in comment),
+                  in export,
+                  in importStatementList,
+                  in decoratorList,
+                  in typeParameterList,
+                  in constructor,
+                  in methodList,
+                  in propertyList,
+                  in extendsList,
+                  in implementsList,
+                  in isAbstract)
         {
         }
 
@@ -81,13 +82,13 @@ namespace DevOps.Primitives.TypeScript
 
         protected override string GetTypeDeclaration()
         {
-            var export = Export ? "export " : string.Empty;
-            var @abstract = IsAbstract ? "abstract " : string.Empty;
-            var extends = $" {ExtendsList?.GetBaseListSyntax(BaseListKind.Extends)}".TrimEnd();
-            var implements = $" {ImplementsList?.GetBaseListSyntax(BaseListKind.Implements)}".TrimEnd();
+            var export = Export ? "export " : Empty;
+            var @abstract = IsAbstract ? "abstract " : Empty;
+            var extends = Concat(" ", ExtendsList?.GetBaseListSyntax(BaseListKind.Extends) ?? Empty).TrimEnd();
+            var implements = Concat(" ", ImplementsList?.GetBaseListSyntax(BaseListKind.Implements) ?? Empty).TrimEnd();
             var stringBuilder = new StringBuilder()
                 .Append(DocumentationComment.ToSelfClosingJsDoc())
-                .AppendLine($"{export}{@abstract}class {Identifier}{TypeParameterList?.GetTypeParameterListSyntax()}{extends}{implements} {{");
+                .AppendLine(Concat(export, @abstract, "class ", Identifier.ToString(), TypeParameterList?.GetTypeParameterListSyntax() ?? Empty, extends, implements, " {"));
             // Add properties
             if (PropertyList != null)
             {

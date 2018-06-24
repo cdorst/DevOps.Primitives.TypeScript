@@ -13,39 +13,54 @@ namespace DevOps.Primitives.TypeScript
     public class PropertyList : IUniqueList<Property, PropertyListAssociation>
     {
         public PropertyList() { }
-        public PropertyList(List<PropertyListAssociation> propertyListAssociations, AsciiStringReference listIdentifier = null)
+        public PropertyList(
+            in List<PropertyListAssociation> propertyListAssociations,
+            in AsciiStringReference listIdentifier = default)
         {
             PropertyListAssociations = propertyListAssociations;
             ListIdentifier = listIdentifier;
         }
-        public PropertyList(PropertyListAssociation propertyListAssociation, AsciiStringReference listIdentifier = null)
-            : this(new List<PropertyListAssociation> { propertyListAssociation }, listIdentifier)
+        public PropertyList(
+            in PropertyListAssociation propertyListAssociation,
+            in AsciiStringReference listIdentifier = default)
+            : this(new List<PropertyListAssociation> { propertyListAssociation }, in listIdentifier)
         {
         }
         public PropertyList(
-            Identifier identifier,
-            Identifier type,
-            DocumentationComment documentationComment,
-            AccessModifiers? accessModifier = null,
-            bool isStatic = false,
-            bool isReadonly = false,
-            DecoratorList decoratorList = null,
-            Expression defaultValue = null,
-            AsciiStringReference listIdentifier = null)
-            : this(new PropertyListAssociation(identifier, type, documentationComment, accessModifier, isStatic, isReadonly, decoratorList, defaultValue), listIdentifier)
+            in Identifier identifier,
+            in Identifier type,
+            in DocumentationComment documentationComment,
+            in AccessModifiers? accessModifier = default,
+            in bool isStatic = default,
+            in bool isReadonly = default,
+            in DecoratorList decoratorList = default,
+            in Expression defaultValue = default,
+            in AsciiStringReference listIdentifier = default)
+            : this(
+                  new PropertyListAssociation(in identifier, in type, in documentationComment, in accessModifier, in isStatic, in isReadonly, in decoratorList, in defaultValue),
+                  in listIdentifier)
         {
         }
         public PropertyList(
-            string identifier,
-            string type,
-            string comment,
-            AccessModifiers? accessModifier = null,
-            bool isStatic = false,
-            bool isReadonly = false,
-            DecoratorList decoratorList = null,
-            Expression defaultValue = null,
-            AsciiStringReference listIdentifier = null)
-            : this(new Identifier(identifier), new Identifier(type), new DocumentationComment(comment), accessModifier, isStatic, isReadonly, decoratorList, defaultValue, listIdentifier)
+            in string identifier,
+            in string type,
+            in string comment,
+            in AccessModifiers? accessModifier = default,
+            in bool isStatic = default,
+            in bool isReadonly = default,
+            in DecoratorList decoratorList = default,
+            in Expression defaultValue = default,
+            in AsciiStringReference listIdentifier = default)
+            : this(
+                  new Identifier(in identifier),
+                  new Identifier(in type),
+                  new DocumentationComment(in comment),
+                  in accessModifier,
+                  in isStatic,
+                  in isReadonly,
+                  in decoratorList,
+                  in defaultValue,
+                  in listIdentifier)
         {
         }
 
@@ -63,11 +78,11 @@ namespace DevOps.Primitives.TypeScript
 
         public List<PropertyListAssociation> GetAssociations() => PropertyListAssociations;
 
-        public void SetRecords(List<Property> records)
+        public void SetRecords(in List<Property> records)
         {
-            PropertyListAssociations = UniqueListAssociationsFactory<Property, PropertyListAssociation>.Create(records);
+            PropertyListAssociations = UniqueListAssociationsFactory<Property, PropertyListAssociation>.Create(in records);
             ListIdentifier = new AsciiStringReference(
-                UniqueListIdentifierFactory<Property>.Create(records, r => r.PropertyId));
+                UniqueListIdentifierFactory<Property>.Create(in records, r => r.PropertyId));
         }
     }
 }

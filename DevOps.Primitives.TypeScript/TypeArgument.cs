@@ -10,8 +10,8 @@ namespace DevOps.Primitives.TypeScript
     public class TypeArgument : IUniqueListRecord
     {
         public TypeArgument() { }
-        public TypeArgument(Identifier identifier) { Identifier = identifier; }
-        public TypeArgument(string identifier) : this(new Identifier(identifier)) { }
+        public TypeArgument(in Identifier identifier) => Identifier = identifier;
+        public TypeArgument(in string identifier) : this(new Identifier(in identifier)) { }
 
         [Key]
         [ProtoMember(1)]
@@ -22,7 +22,6 @@ namespace DevOps.Primitives.TypeScript
         [ProtoMember(3)]
         public int IdentifierId { get; set; }
 
-        public string GetTypeArgumentSyntax()
-            => Identifier.ToString();
+        public string GetTypeArgumentSyntax() => Identifier.ToString();
     }
 }

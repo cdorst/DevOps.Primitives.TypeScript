@@ -12,7 +12,50 @@ namespace DevOps.Primitives.TypeScript
         private const string CompilerOptions = nameof(CompilerOptions);
 
         public TsConfigInfo() { }
-        public TsConfigInfo(TsConfigTarget target, TsConfigModule module, IEnumerable<TsConfigLib> lib = null, bool allowJs = false, bool checkJs = false, TsConfigJsx? jsx = null, bool declaration = false, bool sourceMap = false, string outFile = null, string outDir = null, string rootDir = null, bool removeComments = false, bool noEmit = false, bool importHelpers = false, bool downLevelIteration = false, bool isolatedModules = false, bool strict = false, bool noImplicitAny = false, bool strictNullChecks = false, bool strictFunctionsTypes = false, bool strictPropertyInitialization = false, bool noImplicitThis = false, bool alwaysStrict = false, bool noUnusedLocals = false, bool noUnusedParameters = false, bool noImplicitReturns = false, bool noFallthroughCasesInSwitch = false, TsConfigModuleResolution? moduleResolution = null, string baseUrl = null, IDictionary<string, IEnumerable<string>> paths = null, IEnumerable<string> rootDirs = null, IEnumerable<string> typeRoots = null, IEnumerable<string> types = null, bool allowSyntheticDefaultImports = false, bool esModuleInterop = false, bool preserveSymlinks = false, string sourceRoot = null, string mapRoot = null, bool inlineSourceMap = false, bool inlineSources = false, bool experimentalDecorators = false, bool emitDecoratorMetadata = false, IEnumerable<string> includePaths = null)
+        public TsConfigInfo(
+            in TsConfigTarget target,
+            in TsConfigModule module,
+            in IEnumerable<TsConfigLib> lib = default,
+            in bool allowJs = default,
+            in bool checkJs = default,
+            in TsConfigJsx? jsx = default,
+            in bool declaration = default,
+            in bool sourceMap = default,
+            in string outFile = default,
+            in string outDir = default,
+            in string rootDir = default,
+            in bool removeComments = default,
+            in bool noEmit = default,
+            in bool importHelpers = default,
+            in bool downLevelIteration = default,
+            in bool isolatedModules = default,
+            in bool strict = default,
+            in bool noImplicitAny = default,
+            in bool strictNullChecks = default,
+            in bool strictFunctionsTypes = default,
+            in bool strictPropertyInitialization = default,
+            in bool noImplicitThis = default,
+            in bool alwaysStrict = default,
+            in bool noUnusedLocals = default,
+            in bool noUnusedParameters = default,
+            in bool noImplicitReturns = default,
+            in bool noFallthroughCasesInSwitch = default,
+            in TsConfigModuleResolution? moduleResolution = default,
+            in string baseUrl = default,
+            in IDictionary<string, IEnumerable<string>> paths = default,
+            in IEnumerable<string> rootDirs = default,
+            in IEnumerable<string> typeRoots = default,
+            in IEnumerable<string> types = default,
+            in bool allowSyntheticDefaultImports = default,
+            in bool esModuleInterop = default,
+            in bool preserveSymlinks = default,
+            in string sourceRoot = default,
+            in string mapRoot = default,
+            in bool inlineSourceMap = default,
+            in bool inlineSources = default,
+            in bool experimentalDecorators = default,
+            in bool emitDecoratorMetadata = default,
+            in IEnumerable<string> includePaths = default)
         {
             Target = target;
             Module = module;

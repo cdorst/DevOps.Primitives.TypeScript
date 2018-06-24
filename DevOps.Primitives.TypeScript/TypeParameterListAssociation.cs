@@ -10,17 +10,23 @@ namespace DevOps.Primitives.TypeScript
     public class TypeParameterListAssociation : IUniqueListAssociation<TypeParameter>
     {
         public TypeParameterListAssociation() { }
-        public TypeParameterListAssociation(TypeParameter typeParameter, TypeParameterList typeParameterList = null)
+        public TypeParameterListAssociation(
+            in TypeParameter typeParameter,
+            in TypeParameterList typeParameterList = default)
         {
             TypeParameter = typeParameter;
             TypeParameterList = typeParameterList;
         }
-        public TypeParameterListAssociation(Identifier typeParameter, TypeParameterList typeParameterList = null)
-            : this(new TypeParameter(typeParameter), typeParameterList)
+        public TypeParameterListAssociation(
+            in Identifier typeParameter,
+            in TypeParameterList typeParameterList = default)
+            : this(new TypeParameter(in typeParameter), in typeParameterList)
         {
         }
-        public TypeParameterListAssociation(string typeParameter, TypeParameterList typeParameterList = null)
-            : this(new Identifier(typeParameter), typeParameterList)
+        public TypeParameterListAssociation(
+            in string typeParameter,
+            in TypeParameterList typeParameterList = default)
+            : this(new Identifier(in typeParameter), in typeParameterList)
         {
         }
 
@@ -40,10 +46,10 @@ namespace DevOps.Primitives.TypeScript
 
         public TypeParameter GetRecord() => TypeParameter;
 
-        public void SetRecord(TypeParameter record)
+        public void SetRecord(in TypeParameter record)
         {
             TypeParameter = record;
-            TypeParameterId = TypeParameter.TypeParameterId;
+            TypeParameterId = record.TypeParameterId;
         }
     }
 }

@@ -2,6 +2,7 @@
 using ProtoBuf;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static System.String;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -10,13 +11,17 @@ namespace DevOps.Primitives.TypeScript
     public class BaseType : IUniqueListRecord
     {
         public BaseType() { }
-        public BaseType(Identifier identifier, TypeArgumentList typeArgumentList = null)
+        public BaseType(
+            in Identifier identifier,
+            in TypeArgumentList typeArgumentList = default)
         {
             Identifier = identifier;
             TypeArgumentList = typeArgumentList;
         }
-        public BaseType(string identifier, TypeArgumentList typeArgumentList = null)
-            : this(new Identifier(identifier), typeArgumentList)
+        public BaseType(
+            in string identifier,
+            in TypeArgumentList typeArgumentList = default)
+            : this(new Identifier(in identifier), in typeArgumentList)
         {
         }
 
@@ -35,6 +40,6 @@ namespace DevOps.Primitives.TypeScript
         public int? TypeArgumentListId { get; set; }
 
         public string GetBaseTypeSyntax()
-            => $"{Identifier}{TypeArgumentList?.GetTypeArgumentListSyntax()}";
+            => Concat(Identifier.ToString(), TypeArgumentList?.GetTypeArgumentListSyntax() ?? Empty);
     }
 }

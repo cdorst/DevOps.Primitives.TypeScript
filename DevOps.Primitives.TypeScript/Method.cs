@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using static DevOps.Primitives.TypeScript.StringConstants;
+using static System.String;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -13,20 +14,47 @@ namespace DevOps.Primitives.TypeScript
     public class Method : IUniqueListRecord
     {
         public Method() { }
-        public Method(Identifier identifier, DocumentationComment comment, Block block = null, Identifier type = null, AccessModifiers? accessModifier = null, bool isAsync = false, ParameterList parameterList = null, DecoratorList decoratorList = null, TypeParameterList typeParameterList = null)
+        public Method(
+            in Identifier identifier,
+            in DocumentationComment comment,
+            in Block block = default,
+            in Identifier type = default,
+            in AccessModifiers? accessModifier = default,
+            in bool isAsync = default,
+            in ParameterList parameterList = default,
+            in DecoratorList decoratorList = default,
+            in TypeParameterList typeParameterList = default)
         {
             AccessModifier = accessModifier;
-            IsAsync = isAsync;
             Block = block;
             DecoratorList = decoratorList;
             DocumentationComment = comment;
             Identifier = identifier;
+            IsAsync = isAsync;
             ParameterList = parameterList;
             Type = type;
             TypeParameterList = typeParameterList;
         }
-        public Method(string identifier, string comment, Block block = null, string type = null, AccessModifiers? accessModifier = null, bool isAsync = false, ParameterList parameterList = null, DecoratorList decoratorList = null, TypeParameterList typeParameterList = null)
-            : this(new Identifier(identifier), new DocumentationComment(comment), block, string.IsNullOrWhiteSpace(type) ? null : new Identifier(type), accessModifier, isAsync, parameterList, decoratorList, typeParameterList)
+        public Method(
+            in string identifier,
+            in string comment,
+            in Block block = default,
+            in string type = default,
+            in AccessModifiers? accessModifier = default,
+            in bool isAsync = default,
+            in ParameterList parameterList = default,
+            in DecoratorList decoratorList = default,
+            in TypeParameterList typeParameterList = default)
+            : this(
+                  new Identifier(in identifier),
+                  new DocumentationComment(in comment),
+                  in block,
+                  string.IsNullOrWhiteSpace(type) ? null : new Identifier(in type),
+                  in accessModifier,
+                  in isAsync,
+                  in parameterList,
+                  in decoratorList,
+                  in typeParameterList)
         {
         }
 
@@ -77,17 +105,17 @@ namespace DevOps.Primitives.TypeScript
 
         public string GetMethodSyntax()
         {
-            var modifier = AccessModifier == null ? string.Empty : $"{AccessModifier.GetStringValue()} ";
-            var type = Type == null ? string.Empty : $": {Type}";
-            var block = Block == null ? ";" : $" {Block.GetBlockSyntax()}";
-            return $"{GetDocumentation(DocumentationComment, ParameterList)}{NewLine}{modifier}{Identifier}({ParameterList?.GetParameterListSyntax()}){type}{block}";
+            var modifier = AccessModifier == null ? Empty : Concat(AccessModifier.GetStringValue(), " ");
+            var type = Type == null ? Empty : Concat(": ", Type);
+            var block = Block == null ? ";" : Concat(" ",Block.GetBlockSyntax());
+            return Concat(GetDocumentation(DocumentationComment, ParameterList), NewLine, modifier, Identifier.ToString(), "(", ParameterList?.GetParameterListSyntax() ?? Empty, ")", type, block);
         }
 
-        private static string GetDocumentation(DocumentationComment comment, ParameterList parameters)
+        private static string GetDocumentation(in DocumentationComment comment, in ParameterList parameters)
         {
-            var documentationBuilder = new StringBuilder().Append(OpenJsDoc).AppendLine($" * {comment}");
+            var documentationBuilder = new StringBuilder().Append(OpenJsDoc).AppendLine(Concat(" * ", comment));
             foreach (var parameter in parameters?.GetRecords() ?? new Parameter[] { })
-                documentationBuilder.AppendLine($" * @param {parameter.Identifier} - {parameter.DocumentationComment}");
+                documentationBuilder.AppendLine(Concat(" * @param ", parameter.Identifier, " - ", parameter.DocumentationComment));
             return documentationBuilder.AppendLine(CloseJsDoc).ToString();
         }
     }

@@ -10,7 +10,7 @@ namespace DevOps.Primitives.TypeScript
     public class EnumMemberListAssociation : IUniqueListAssociation<EnumMember>
     {
         public EnumMemberListAssociation() { }
-        public EnumMemberListAssociation(EnumMember enumMember, EnumMemberList enumMemberList = null)
+        public EnumMemberListAssociation(in EnumMember enumMember, in EnumMemberList enumMemberList = default)
         {
             EnumMember = enumMember;
             EnumMemberList = enumMemberList;
@@ -32,10 +32,10 @@ namespace DevOps.Primitives.TypeScript
 
         public EnumMember GetRecord() => EnumMember;
 
-        public void SetRecord(EnumMember record)
+        public void SetRecord(in EnumMember record)
         {
             EnumMember = record;
-            EnumMemberId = EnumMember.EnumMemberId;
+            EnumMemberId = record.EnumMemberId;
         }
     }
 }

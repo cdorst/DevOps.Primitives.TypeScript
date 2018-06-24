@@ -17,17 +17,17 @@ namespace DevOps.Primitives.TypeScript
     {
         public TypeDeclaration() { }
         public TypeDeclaration(
-            Identifier identifier,
-            Namespace @namespace,
-            DocumentationComment comment,
-            bool export = true,
-            ImportStatementList importStatementList = null,
-            DecoratorList attributeListCollection = null,
-            TypeParameterList typeParameterList = null,
-            Constructor constructor = null,
-            MethodList methodList = null,
-            PropertyList propertyList = null,
-            BaseList extendsList = null)
+            in Identifier identifier,
+            in Namespace @namespace,
+            in DocumentationComment comment,
+            in bool export = true,
+            in ImportStatementList importStatementList = default,
+            in DecoratorList attributeListCollection = default,
+            in TypeParameterList typeParameterList = default,
+            in Constructor constructor = default,
+            in MethodList methodList = default,
+            in PropertyList propertyList = default,
+            in BaseList extendsList = default)
         {
             Identifier = identifier;
             Namespace = @namespace;
@@ -42,29 +42,29 @@ namespace DevOps.Primitives.TypeScript
             ExtendsList = extendsList;
         }
         public TypeDeclaration(
-            string identifier,
-            string @namespace,
-            string comment,
-            bool export = true,
-            ImportStatementList importStatementList = null,
-            DecoratorList decoratorList = null,
-            TypeParameterList typeParameterList = null,
-            Constructor constructor = null,
-            MethodList methodList = null,
-            PropertyList propertyList = null,
-            BaseList extendsList = null)
+            in string identifier,
+            in string @namespace,
+            in string comment,
+            in bool export = true,
+            in ImportStatementList importStatementList = default,
+            in DecoratorList decoratorList = default,
+            in TypeParameterList typeParameterList = default,
+            in Constructor constructor = default,
+            in MethodList methodList = default,
+            in PropertyList propertyList = default,
+            in BaseList extendsList = default)
             : this(
-                  new Identifier(identifier),
-                  new Namespace(@namespace),
-                  new DocumentationComment(comment),
-                  export,
-                  importStatementList,
-                  decoratorList,
-                  typeParameterList,
-                  constructor,
-                  methodList,
-                  propertyList,
-                  extendsList)
+                  new Identifier(in identifier),
+                  new Namespace(in @namespace),
+                  new DocumentationComment(in comment),
+                  in export,
+                  in importStatementList,
+                  in decoratorList,
+                  in typeParameterList,
+                  in constructor,
+                  in methodList,
+                  in propertyList,
+                  in extendsList)
         {
         }
 
@@ -125,8 +125,7 @@ namespace DevOps.Primitives.TypeScript
         [ProtoMember(22)]
         public int? TypeParameterListId { get; set; }
 
-        public string GetTypeName()
-            => Identifier.ToString();
+        public string GetTypeName() => Identifier.ToString();
 
         public override string ToString()
         {
@@ -141,7 +140,7 @@ namespace DevOps.Primitives.TypeScript
             }
 
             var declaration = GetTypeDeclaration();
-            if (Namespace != null) declaration = Namespace.GetNamespaceSyntax(declaration);
+            if (Namespace != null) declaration = Namespace.GetNamespaceSyntax(in declaration);
 
             return stringBuilder
                 .AppendLine()

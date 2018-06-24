@@ -10,17 +10,39 @@ namespace DevOps.Primitives.TypeScript
     public class MethodListAssociation : IUniqueListAssociation<Method>
     {
         public MethodListAssociation() { }
-        public MethodListAssociation(Method method, MethodList methodList = null)
+        public MethodListAssociation(
+            in Method method,
+            in MethodList methodList = default)
         {
             Method = method;
             MethodList = methodList;
         }
-        public MethodListAssociation(Identifier identifier, DocumentationComment comment, Block block = null, Identifier type = null, AccessModifiers? accessModifier = null, bool isAsync = false, ParameterList parameterList = null, DecoratorList decoratorList = null, TypeParameterList typeParameterList = null, MethodList methodList = null)
-            : this(new Method(identifier, comment, block, type, accessModifier, isAsync, parameterList, decoratorList, typeParameterList), methodList)
+        public MethodListAssociation(
+            in Identifier identifier,
+            in DocumentationComment comment,
+            in Block block = default,
+            in Identifier type = default,
+            in AccessModifiers? accessModifier = default,
+            in bool isAsync = default,
+            in ParameterList parameterList = default,
+            in DecoratorList decoratorList = default,
+            in TypeParameterList typeParameterList = default,
+            in MethodList methodList = default)
+            : this(new Method(in identifier, in comment, in block, in type, in accessModifier, in isAsync, in parameterList, in decoratorList, in typeParameterList), in methodList)
         {
         }
-        public MethodListAssociation(string identifier, string comment, Block block = null, string type = null, AccessModifiers? accessModifier = null, bool isAsync = false, ParameterList parameterList = null, DecoratorList decoratorList = null, TypeParameterList typeParameterList = null, MethodList methodList = null)
-            : this(new Identifier(identifier), new DocumentationComment(comment), block, string.IsNullOrWhiteSpace(type) ? null : new Identifier(type), accessModifier, isAsync, parameterList, decoratorList, typeParameterList, methodList)
+        public MethodListAssociation(
+            in string identifier,
+            in string comment,
+            in Block block = default,
+            in string type = default,
+            in AccessModifiers? accessModifier = default,
+            in bool isAsync = default,
+            in ParameterList parameterList = default,
+            in DecoratorList decoratorList = default,
+            in TypeParameterList typeParameterList = default,
+            in MethodList methodList = default)
+            : this(new Identifier(in identifier), new DocumentationComment(in comment), in block, string.IsNullOrWhiteSpace(type) ? null : new Identifier(in type), in accessModifier, in isAsync, in parameterList, in decoratorList, in typeParameterList, in methodList)
         {
         }
 
@@ -40,10 +62,10 @@ namespace DevOps.Primitives.TypeScript
 
         public Method GetRecord() => Method;
 
-        public void SetRecord(Method record)
+        public void SetRecord(in Method record)
         {
             Method = record;
-            MethodId = Method.MethodId;
+            MethodId = record.MethodId;
         }
     }
 }

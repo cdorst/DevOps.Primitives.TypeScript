@@ -10,17 +10,23 @@ namespace DevOps.Primitives.TypeScript
     public class TypeArgumentListAssociation : IUniqueListAssociation<TypeArgument>
     {
         public TypeArgumentListAssociation() { }
-        public TypeArgumentListAssociation(TypeArgument typeArgument, TypeArgumentList typeArgumentList = null)
+        public TypeArgumentListAssociation(
+            in TypeArgument typeArgument,
+            in TypeArgumentList typeArgumentList = default)
         {
             TypeArgument = typeArgument;
             TypeArgumentList = typeArgumentList;
         }
-        public TypeArgumentListAssociation(Identifier typeArgument, TypeArgumentList typeArgumentList = null)
-            : this(new TypeArgument(typeArgument), typeArgumentList)
+        public TypeArgumentListAssociation(
+            in Identifier typeArgument,
+            in TypeArgumentList typeArgumentList = default)
+            : this(new TypeArgument(in typeArgument), in typeArgumentList)
         {
         }
-        public TypeArgumentListAssociation(string typeArgument, TypeArgumentList typeArgumentList = null)
-            : this(new Identifier(typeArgument), typeArgumentList)
+        public TypeArgumentListAssociation(
+            in string typeArgument,
+            in TypeArgumentList typeArgumentList = default)
+            : this(new Identifier(in typeArgument), in typeArgumentList)
         {
         }
 
@@ -40,10 +46,10 @@ namespace DevOps.Primitives.TypeScript
 
         public TypeArgument GetRecord() => TypeArgument;
 
-        public void SetRecord(TypeArgument record)
+        public void SetRecord(in TypeArgument record)
         {
             TypeArgument = record;
-            TypeArgumentId = TypeArgument.TypeArgumentId;
+            TypeArgumentId = record.TypeArgumentId;
         }
     }
 }

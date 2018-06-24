@@ -2,6 +2,7 @@
 using ProtoBuf;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static System.String;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -10,13 +11,17 @@ namespace DevOps.Primitives.TypeScript
     public class Decorator : IUniqueListRecord
     {
         public Decorator() { }
-        public Decorator(Identifier identifier, DecoratorArgumentListExpression argumentListExpression = null)
+        public Decorator(
+            in Identifier identifier,
+            in DecoratorArgumentListExpression argumentListExpression = default)
         {
             Identifier = identifier;
             DecoratorArgumentListExpression = argumentListExpression;
         }
-        public Decorator(string identifier, string argumentListExpression = null)
-            : this(new Identifier(identifier), string.IsNullOrEmpty(argumentListExpression) ? null : new DecoratorArgumentListExpression(argumentListExpression))
+        public Decorator(
+            in string identifier,
+            in string argumentListExpression = default)
+            : this(new Identifier(identifier), IsNullOrEmpty(argumentListExpression) ? null : new DecoratorArgumentListExpression(argumentListExpression))
         {
         }
 
@@ -35,6 +40,6 @@ namespace DevOps.Primitives.TypeScript
         public int? DecoratorArgumentListExpressionId { get; set; }
 
         public string GetDecoratorSyntax()
-            => $"@{Identifier}{DecoratorArgumentListExpression?.GetDecoratorArgumentListExpressionSyntax()}";
+            => Concat("@", Identifier, DecoratorArgumentListExpression?.GetDecoratorArgumentListExpressionSyntax() ?? Empty);
     }
 }

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using static System.String;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -14,34 +15,42 @@ namespace DevOps.Primitives.TypeScript
     {
         public Property() { }
         public Property(
-            Identifier identifier,
-            Identifier type,
-            DocumentationComment documentationComment,
-            AccessModifiers? accessModifier = null,
-            bool isStatic = false,
-            bool isReadonly = false,
-            DecoratorList decoratorList = null,
-            Expression defaultValue = null)
+            in Identifier identifier,
+            in Identifier type,
+            in DocumentationComment documentationComment,
+            in AccessModifiers? accessModifier = default,
+            in bool isStatic = default,
+            in bool isReadonly = default,
+            in DecoratorList decoratorList = default,
+            in Expression defaultValue = default)
         {
-            Identifier = identifier;
-            Type = type;
-            DocumentationComment = documentationComment;
             AccessModifier = accessModifier;
-            IsStatic = isStatic;
-            IsReadonly = isReadonly;
             DecoratorList = decoratorList;
             DefaultValue = defaultValue;
+            DocumentationComment = documentationComment;
+            Identifier = identifier;
+            IsReadonly = isReadonly;
+            IsStatic = isStatic;
+            Type = type;
         }
         public Property(
-            string identifier,
-            string type,
-            string comment,
-            AccessModifiers? accessModifier = null,
-            bool isStatic = false,
-            bool isReadonly = false,
-            DecoratorList decoratorList = null,
-            Expression defaultValue = null)
-            : this(new Identifier(identifier), new Identifier(type), new DocumentationComment(comment), accessModifier, isStatic, isReadonly, decoratorList, defaultValue)
+            in string identifier,
+            in string type,
+            in string comment,
+            in AccessModifiers? accessModifier = default,
+            in bool isStatic = default,
+            in bool isReadonly = default,
+            in DecoratorList decoratorList = default,
+            in Expression defaultValue = default)
+            : this(
+                  new Identifier(in identifier),
+                  new Identifier(in type),
+                  new DocumentationComment(in comment),
+                  in accessModifier,
+                  in isStatic,
+                  in isReadonly,
+                  in decoratorList,
+                  in defaultValue)
         {
         }
 
@@ -90,15 +99,15 @@ namespace DevOps.Primitives.TypeScript
             foreach (var decorator in decorators ?? new string[] { })
                 stringBuilder.AppendLine(decorator);
             return stringBuilder
-                .AppendLine($"{GetModifiers()}{Identifier}: {Type}{DefaultValue?.GetDefaultValueAssignmentSyntax()};")
+                .AppendLine(Concat(GetModifiers(), Identifier.ToString(), ": ", Type, DefaultValue?.GetDefaultValueAssignmentSyntax() ?? Empty, ";"))
                 .ToString();
         }
 
         private string GetModifiers()
         {
-            var modifiers = AccessModifier == null ? string.Empty : $"{AccessModifier.GetStringValue()} ";
-            if (IsStatic) modifiers = $"{modifiers}static ";
-            if (IsReadonly) modifiers = $"{modifiers}readonly ";
+            var modifiers = AccessModifier == null ? Empty : Concat(AccessModifier.GetStringValue(), " ");
+            if (IsStatic) modifiers = Concat(modifiers, "static ");
+            if (IsReadonly) modifiers = Concat(modifiers, "readonly ");
             return modifiers;
         }
     }

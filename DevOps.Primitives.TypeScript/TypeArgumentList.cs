@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using static DevOps.Primitives.TypeScript.StringConstants;
+using static System.String;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -15,21 +16,29 @@ namespace DevOps.Primitives.TypeScript
     public class TypeArgumentList : IUniqueList<TypeArgument, TypeArgumentListAssociation>
     {
         public TypeArgumentList() { }
-        public TypeArgumentList(List<TypeArgumentListAssociation> typeArgumentListAssociations, AsciiStringReference listIdentifier = null)
+        public TypeArgumentList(
+            in List<TypeArgumentListAssociation> typeArgumentListAssociations,
+            in AsciiStringReference listIdentifier = default)
         {
             TypeArgumentListAssociations = typeArgumentListAssociations;
             ListIdentifier = listIdentifier;
         }
-        public TypeArgumentList(TypeArgumentListAssociation typeArgumentListAssociation, AsciiStringReference listIdentifier = null)
-            : this(new List<TypeArgumentListAssociation> { typeArgumentListAssociation }, listIdentifier)
+        public TypeArgumentList(
+            in TypeArgumentListAssociation typeArgumentListAssociation,
+            in AsciiStringReference listIdentifier = default)
+            : this(new List<TypeArgumentListAssociation> { typeArgumentListAssociation }, in listIdentifier)
         {
         }
-        public TypeArgumentList(Identifier typeArgument, AsciiStringReference listIdentifier = null)
-            : this(new TypeArgumentListAssociation(typeArgument), listIdentifier)
+        public TypeArgumentList(
+            in Identifier typeArgument,
+            in AsciiStringReference listIdentifier = default)
+            : this(new TypeArgumentListAssociation(in typeArgument), in listIdentifier)
         {
         }
-        public TypeArgumentList(string typeArgument, AsciiStringReference listIdentifier = null)
-            : this(new Identifier(typeArgument), listIdentifier)
+        public TypeArgumentList(
+            in string typeArgument,
+            in AsciiStringReference listIdentifier = default)
+            : this(new Identifier(in typeArgument), in listIdentifier)
         {
         }
 
@@ -47,14 +56,14 @@ namespace DevOps.Primitives.TypeScript
 
         public List<TypeArgumentListAssociation> GetAssociations() => TypeArgumentListAssociations;
 
-        public void SetRecords(List<TypeArgument> records)
+        public void SetRecords(in List<TypeArgument> records)
         {
-            TypeArgumentListAssociations = UniqueListAssociationsFactory<TypeArgument, TypeArgumentListAssociation>.Create(records);
+            TypeArgumentListAssociations = UniqueListAssociationsFactory<TypeArgument, TypeArgumentListAssociation>.Create(in records);
             ListIdentifier = new AsciiStringReference(
-                UniqueListIdentifierFactory<TypeArgument>.Create(records, r => r.TypeArgumentId));
+                UniqueListIdentifierFactory<TypeArgument>.Create(in records, r => r.TypeArgumentId));
         }
 
         public string GetTypeArgumentListSyntax()
-            => $"<{string.Join(CommaSpace, this.GetRecords().Select(arg => arg.GetTypeArgumentSyntax()))}>";
+            => Concat("<", Join(CommaSpace, this.GetRecords().Select(arg => arg.GetTypeArgumentSyntax())), ">");
     }
 }

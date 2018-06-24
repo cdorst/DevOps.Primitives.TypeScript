@@ -11,17 +11,23 @@ namespace DevOps.Primitives.TypeScript
     public class StatementListAssociation : IUniqueListAssociation<Statement>
     {
         public StatementListAssociation() { }
-        public StatementListAssociation(Statement statement, StatementList statementList = null)
+        public StatementListAssociation(
+            in Statement statement,
+            in StatementList statementList = default)
         {
             Statement = statement;
             StatementList = statementList;
         }
-        public StatementListAssociation(AsciiMaxStringReference statement, StatementList statementList = null)
-            : this(new Statement(statement), statementList)
+        public StatementListAssociation(
+            in AsciiMaxStringReference statement,
+            in StatementList statementList = default)
+            : this(new Statement(in statement), in statementList)
         {
         }
-        public StatementListAssociation(string statement, StatementList statementList = null)
-            : this(new AsciiMaxStringReference(statement), statementList)
+        public StatementListAssociation(
+            in string statement,
+            in StatementList statementList = default)
+            : this(new AsciiMaxStringReference(in statement), in statementList)
         {
         }
 
@@ -41,10 +47,10 @@ namespace DevOps.Primitives.TypeScript
 
         public Statement GetRecord() => Statement;
 
-        public void SetRecord(Statement record)
+        public void SetRecord(in Statement record)
         {
             Statement = record;
-            StatementId = Statement.StatementId;
+            StatementId = record.StatementId;
         }
     }
 }

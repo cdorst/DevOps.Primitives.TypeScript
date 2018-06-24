@@ -10,17 +10,37 @@ namespace DevOps.Primitives.TypeScript
     public class ParameterListAssociation : IUniqueListAssociation<Parameter>
     {
         public ParameterListAssociation() { }
-        public ParameterListAssociation(Parameter parameter, ParameterList parameterList = null)
+        public ParameterListAssociation(
+            in Parameter parameter,
+            in ParameterList parameterList = default)
         {
             Parameter = parameter;
             ParameterList = parameterList;
         }
-        public ParameterListAssociation(Identifier identifier, Identifier type, DocumentationComment comment, Expression defaultValue = null, DecoratorList decoratorList = null, ParameterList parameterList = null)
-            : this (new Parameter(identifier, type, comment, defaultValue, decoratorList), parameterList)
+        public ParameterListAssociation(
+            in Identifier identifier,
+            in Identifier type,
+            in DocumentationComment comment,
+            in Expression defaultValue = default,
+            in DecoratorList decoratorList = default,
+            in ParameterList parameterList = default)
+            : this (new Parameter(in identifier, in type, in comment, in defaultValue, in decoratorList), in parameterList)
         {
         }
-        public ParameterListAssociation(string identifier, string type, string comment, Expression defaultValue = null, DecoratorList decoratorList = null, ParameterList parameterList = null)
-            : this(new Identifier(identifier), new Identifier(type), new DocumentationComment(comment), defaultValue, decoratorList, parameterList)
+        public ParameterListAssociation(
+            in string identifier,
+            in string type,
+            in string comment,
+            in Expression defaultValue = default,
+            in DecoratorList decoratorList = default,
+            in ParameterList parameterList = default)
+            : this(
+                  new Identifier(in identifier),
+                  new Identifier(in type),
+                  new DocumentationComment(in comment),
+                  in defaultValue,
+                  in decoratorList,
+                  in parameterList)
         {
         }
 
@@ -40,10 +60,10 @@ namespace DevOps.Primitives.TypeScript
 
         public Parameter GetRecord() => Parameter;
 
-        public void SetRecord(Parameter record)
+        public void SetRecord(in Parameter record)
         {
             Parameter = record;
-            ParameterId = Parameter.ParameterId;
+            ParameterId = record.ParameterId;
         }
     }
 }

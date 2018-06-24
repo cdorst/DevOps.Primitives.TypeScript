@@ -10,17 +10,23 @@ namespace DevOps.Primitives.TypeScript
     public class DecoratorListAssociation : IUniqueListAssociation<Decorator>
     {
         public DecoratorListAssociation() { }
-        public DecoratorListAssociation(Decorator decorator, DecoratorList decoratorList = null)
+        public DecoratorListAssociation(
+            in Decorator decorator,
+            in DecoratorList decoratorList = default)
         {
             Decorator = decorator;
             DecoratorList = decoratorList;
         }
-        public DecoratorListAssociation(Identifier decorator, DecoratorList decoratorList = null)
-            : this(new Decorator(decorator), decoratorList)
+        public DecoratorListAssociation(
+            in Identifier decorator,
+            in DecoratorList decoratorList = default)
+            : this(new Decorator(in decorator), in decoratorList)
         {
         }
-        public DecoratorListAssociation(string decorator, DecoratorList decoratorList = null)
-            : this(new Identifier(decorator), decoratorList)
+        public DecoratorListAssociation(
+            in string decorator,
+            in DecoratorList decoratorList = default)
+            : this(new Identifier(in decorator), in decoratorList)
         {
         }
 
@@ -40,10 +46,10 @@ namespace DevOps.Primitives.TypeScript
 
         public Decorator GetRecord() => Decorator;
 
-        public void SetRecord(Decorator record)
+        public void SetRecord(in Decorator record)
         {
             Decorator = record;
-            DecoratorId = Decorator.DecoratorId;
+            DecoratorId = record.DecoratorId;
         }
     }
 }

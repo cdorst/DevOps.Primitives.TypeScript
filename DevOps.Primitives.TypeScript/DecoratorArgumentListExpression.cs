@@ -3,6 +3,7 @@ using ProtoBuf;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static DevOps.Primitives.TypeScript.StringConstants;
+using static System.String;
 
 namespace DevOps.Primitives.TypeScript
 {
@@ -11,8 +12,8 @@ namespace DevOps.Primitives.TypeScript
     public class DecoratorArgumentListExpression
     {
         public DecoratorArgumentListExpression() { }
-        public DecoratorArgumentListExpression(AsciiMaxStringReference expression) { Expression = expression; }
-        public DecoratorArgumentListExpression(string expression) : this(new AsciiMaxStringReference(expression)) { }
+        public DecoratorArgumentListExpression(in AsciiMaxStringReference expression) => Expression = expression;
+        public DecoratorArgumentListExpression(in string expression) : this(new AsciiMaxStringReference(in expression)) { }
 
         [Key]
         [ProtoMember(1)]
@@ -26,8 +27,8 @@ namespace DevOps.Primitives.TypeScript
         public string GetDecoratorArgumentListExpressionSyntax()
         {
             var expression = Expression.Value;
-            if (!expression.StartsWith(OpenParenthesis)) expression = $"{OpenParenthesis}{expression}";
-            if (!expression.EndsWith(CloseParenthesis)) expression = $"{expression}{CloseParenthesis}";
+            if (!expression.StartsWith(OpenParenthesis)) expression = Concat(OpenParenthesis, expression);
+            if (!expression.EndsWith(CloseParenthesis)) expression = Concat(expression, CloseParenthesis);
             return expression;
         }
     }
